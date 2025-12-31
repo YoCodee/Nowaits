@@ -11,19 +11,9 @@
 <body class="bg-gray-50 text-gray-800 antialiased">
 
 
-    <header class="bg-white shadow-sm">
-        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-xl font-bold text-green-600">Nowaits</div>
-            <div>
-             
-                <a href="{{ route('home') }}" class="px-3 py-2 text-gray-600 hover:text-green-600">Home</a>
-                <a href="{{ route('login') }}" class="px-3 py-2 text-gray-600 hover:text-green-600">Login</a>
-                <a href="{{ route('register') }}" class="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700">Register</a>
-            </div>
-        </nav>
-    </header>
+    @include('components.navbar')
 
-  
+
     <main class="container mx-auto px-4 py-8">
         @yield('content')
     </main>

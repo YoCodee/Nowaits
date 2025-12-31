@@ -27,4 +27,10 @@ Route::get('/tracking', function () {
     return view('pages.tracking');
 })->name('tracking');
 
+Route::get('/petani', function () {
+    return view('pages.petani');
+})->name('petani');
 
+Route::get('/mitra', function () {
+    return view('pages.mitra');
+})->name('mitra');
