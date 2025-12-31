@@ -27,9 +27,8 @@ return new class extends Migration {
                 ->comment("Detail mengenai nutrisi saat pertumbuhan buah");
             // Massa tetap sebagai float karena mempengaruhi harga
             $table
-                ->float("massa")
-                ->comment("Massa tidak diubah (mempengaruhi harga)");
-            // Slider-friendly decimal: 0.0 | 0.5 | 1.0
+                ->integer("massa")
+                ->comment("Massa per kg");
             $table
                 ->decimal("tekstur", 2, 1)
                 ->comment(
