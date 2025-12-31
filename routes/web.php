@@ -34,3 +34,7 @@ Route::get('/petani', function () {
 Route::get('/mitra', function () {
     return view('pages.mitra');
 })->name('mitra');
+
+Route::get('/kalkulasi-kriteria', function () {
+    return view('pages.kalkulasi_kriteria');
+})->name('kalkulasi.kriteria');
