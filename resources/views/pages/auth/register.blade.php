@@ -103,7 +103,7 @@
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
 
                     <div class="absolute bottom-0 left-0 right-0 p-10 text-white">
-                        <h2 class="text-5xl font-bold mb-3 text-right">Manage</h2>
+                        <h2 class="text-5xl font-bold mb-3 text-right">NOWAITS</h2>
                         <p class="text-sm font-light leading-relaxed opacity-95 text-right">
                             A digital platform reducing fruit waste by connecting farmers to partners with smart pricing,
                             logistics tracking, and sustainable redistribution systems.

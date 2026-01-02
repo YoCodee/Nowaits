@@ -176,7 +176,7 @@
 <div class="login-container">
     <div class="login-image-side">
         <div class="login-image-text">
-            <h1>Manage</h1>
+            <h1>NOWAITS</h1>
             <p>A digital platform reducing fruit waste by connecting farmers to partners with smart pricing, logistics tracking, and sustainable redistribution systems.</p>
         </div>
     </div>

@@ -14,6 +14,9 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasUuids;
 
     protected $primaryKey = 'id_pengguna';
+    protected $table = 'users';
+    public $incrementing = false; // UUID bukan auto-increment
+    protected $keyType = 'string';
 
     /**
      * The attributes that are mass assignable.
@@ -53,7 +56,7 @@ class User extends Authenticatable
 
     public function getAuthPasswordName()
     {
-        return 'sandi';
+        return "sandi";
     }
 
     public function alamats()

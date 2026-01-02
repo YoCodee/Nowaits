@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-// TODO: Teman -> Ini adalah file routing. Daftarkan URL baru di sini.
+
 
 
 Route::get('/', function () {
@@ -48,8 +48,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/marketplace/{id}/checkout', [App\Http\Controllers\TransaksiController::class, 'checkout'])->name('transaksi.checkout');
     Route::post('/transaksi', [App\Http\Controllers\TransaksiController::class, 'store'])->name('transaksi.store');
 
-
-
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
@@ -66,12 +64,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/penawaran/{id}/accept', [App\Http\Controllers\PenawaranController::class, 'accept'])->name('penawaran.accept');
     Route::post('/penawaran/{id}/reject', [App\Http\Controllers\PenawaranController::class, 'reject'])->name('penawaran.reject');
     Route::get('/penawaran/{id}/checkout', [App\Http\Controllers\PenawaranController::class, 'checkout'])->name('penawaran.checkout');
+    
     // Chat Routes
-    Route::post('/chat/start', [App\Http\Controllers\ChatController::class, 'startChat'])->name('chat.start');
     Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
-    Route::get('/chat/{id}', [App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
-    Route::post('/chat', [App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');
-    Route::get('/chat/fetch/{id}', [App\Http\Controllers\ChatController::class, 'fetch'])->name('chat.fetch');
+    Route::post('/chat/start', [App\Http\Controllers\ChatController::class, 'startChat'])->name('chat.start');
+    
+    // Perhatikan parameternya sekarang {conversation_id}
+    Route::get('/chat/{conversation_id}', [App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
+    
+    // API Routes untuk Axios
+    Route::get('/chat/{conversation_id}/messages', [App\Http\Controllers\ChatController::class, 'fetch']);
+    Route::post('/chat/store', [App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');
+    Route::post('/chat/{conversation_id}/send', [App\Http\Controllers\ChatController::class, 'sendMessage']);
 });
 
 

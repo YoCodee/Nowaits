@@ -94,30 +94,33 @@
                             <form action="{{ route('chat.start') }}" method="POST" class="flex-1">
                                 @csrf
                                 <input type="hidden" name="id_posting" value="{{ $postingan->id_posting }}">
-                                <button type="submit" class="w-full bg-white border-2 border-[#022c22] text-[#022c22] py-3 rounded-xl font-bold hover:bg-gray-50 transition-colors">
-                                    Chat Petani
-                                </button>
+                                    <a href="{{ route('chat.start', $postingan->id_posting) }}" >
+                                        <button type="submit" class="w-full bg-white border-2 border-[#022c22] hover:cursor-pointer text-[#022c22] py-3 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                                            Chat Petani        
+                                        </button>
+                                    </a>
+                                
                             </form>
 
                             @auth
                                 @if(auth()->user()->peran == 'mitra')
                                     @if($postingan->buah->stok > 0)
-                                        <a href="{{ route('transaksi.checkout', $postingan->id_posting) }}" class="flex-[2] bg-[#022c22] text-[#bef264] py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:bg-[#033a2d] transition-all text-center flex items-center justify-center">
+                                        <a href="{{ route('transaksi.checkout', $postingan->id_posting) }}" class="flex-2 bg-[#022c22] text-[#bef264] py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:bg-[#033a2d] transition-all text-center flex items-center justify-center">
                                             Beli Sekarang
                                         </a>
                                     @else
-                                        <button disabled class="flex-[2] bg-gray-300 text-gray-500 py-3 rounded-xl font-bold cursor-not-allowed flex items-center justify-center gap-2">
+                                        <button disabled class="flex-2 bg-gray-300 text-gray-500 py-3 rounded-xl font-bold cursor-not-allowed flex items-center justify-center gap-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                             Stok Habis
                                         </button>
                                     @endif
                                 @else
-                                    <button disabled class="flex-[2] bg-gray-200 text-gray-400 py-3 rounded-xl font-bold cursor-not-allowed">
+                                    <button disabled class="flex-2 bg-gray-200 text-gray-400 py-3 rounded-xl font-bold cursor-not-allowed">
                                         Khusus Mitra
                                     </button>
                                 @endif
                             @else
-                                <a href="{{ route('login') }}" class="flex-[2] bg-[#022c22] text-[#bef264] py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:bg-[#033a2d] transition-all text-center flex items-center justify-center">
+                                <a href="{{ route('login') }}" class="flex-2 bg-[#022c22] text-[#bef264] py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:bg-[#033a2d] transition-all text-center flex items-center justify-center">
                                     Login untuk Membeli
                                 </a>
                             @endauth

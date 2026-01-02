@@ -2,177 +2,171 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Chat;
-use App\Models\User;
+use App\Models\Conversation; // Ganti Chat model lama dengan Conversation
+use App\Models\Message;      // Model Message baru
 use App\Models\Postingan;
+use App\Events\MessageSent;  // Event Pusher
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
     /**
-     * Show list of conversations for the authenticated user.
-     * Grouped by Partner AND Posting (Context).
+     * Show list of conversations (Inbox).
+     * 
      */
     public function index()
     {
         $userId = Auth::user()->id_pengguna;
 
-        // Fetch messages involving the user, newest first
-        $messages = Chat::with(['sender', 'receiver', 'posting'])
-            ->where('sender_id', $userId)
-            ->orWhere('receiver_id', $userId)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        // Ambil percakapan di mana user terlibat
+        // Eager load: pesan terakhir, lawan bicara, dan info postingan
+        $conversations = Conversation::where('user_one_id', $userId)
+            ->orWhere('user_two_id', $userId)
+            ->with(['lastMessage', 'posting', 'userOne', 'userTwo'])
+            ->get()
+            ->sortByDesc(function($conversation) {
+                return $conversation->lastMessage->created_at ?? $conversation->created_at;
+            });
 
-        $conversations = [];
-
-        foreach ($messages as $m) {
-            $partnerId = $m->sender_id === $userId ? $m->receiver_id : $m->sender_id;
-            $postingId = $m->id_posting;
-            
-            // Unique key for conversation: Partner + Posting
-            $key = $partnerId . '_' . $postingId;
-
-            if (!isset($conversations[$key])) {
-                $partner = User::find($partnerId);
-                if (!$partner) continue;
-
-                $posting = $m->posting; // Could be null if deleted or specific general chat
-                
-                $unread = Chat::where('sender_id', $partnerId)
-                    ->where('receiver_id', $userId)
-                    ->where('id_posting', $postingId)
-                    ->where('is_read', false)
-                    ->count();
-
-                $conversations[$key] = [
-                    'partner' => $partner,
-                    'posting' => $posting, // Pass posting info
-                    'id_posting' => $postingId,
-                    'last_message' => $m->message,
-                    'time' => $m->created_at,
-                    'is_read' => $m->is_read,
-                    'unread_count' => $unread,
-                ];
-            }
-        }
-
-        // Sort by latest message time
-        usort($conversations, function ($a, $b) {
-            return $b['time']->timestamp <=> $a['time']->timestamp;
-        });
-
-        return view('pages.chat.index', ['chats' => $conversations]);
+        return view('pages.marketplace.chat.index', compact('conversations', 'userId'));
     }
 
     /**
-     * Initiate a chat from Marketplace (Product Page).
+     * Start chat from Marketplace (Product Page).
+     * Logic: Cek apakah Room untuk produk ini sudah ada? Kalau belum, buat baru.
      */
     public function startChat(Request $request)
     {
-        $request->validate([
-            'id_posting' => 'required', // ID Posting
-        ]);
+        $request->validate(['id_posting' => 'required']);
 
         $posting = Postingan::findOrFail($request->id_posting);
-        
-        // Prevent chatting with self
-        if ($posting->id_pengguna == Auth::user()->id_pengguna) {
-             return redirect()->back()->with('error', 'Anda tidak dapat mengirim pesan ke diri sendiri.');
+        $myId = Auth::user()->id_pengguna;
+        $sellerId = $posting->id_pengguna;
+
+        if ($myId == $sellerId) {
+            return back()->with('error', 'Tidak bisa chat diri sendiri.');
         }
 
-        // Redirect to chat show page with correct partner and context
-        return redirect()->route('chat.show', [
-            'id' => $posting->id_pengguna, 
-            'posting_id' => $posting->id_posting
-        ]);
+        // Cek conversation spesifik untuk User A, User B, DAN Postingan X
+        $conversation = Conversation::where('id_posting', $posting->id_posting)
+            ->where(function($q) use ($myId, $sellerId) {
+                $q->where(function($sub) use ($myId, $sellerId) {
+                    $sub->where('user_one_id', $myId)->where('user_two_id', $sellerId);
+                })->orWhere(function($sub) use ($myId, $sellerId) {
+                    $sub->where('user_one_id', $sellerId)->where('user_two_id', $myId);
+                });
+            })->first();
+
+        // Jika belum ada, buat room baru
+        if (!$conversation) {
+            $conversation = Conversation::create([
+                'user_one_id' => $myId,
+                'user_two_id' => $sellerId,
+                'id_posting' => $posting->id_posting // Simpan konteks postingan
+            ]);
+        }
+
+        // Redirect ke halaman chat room
+        return redirect()->route('chat.show', $conversation->id);
     }
 
     /**
-     * Show a chat with a specific partner, optionally scoped to a posting.
+     * Show Chat Room.
+     * Menggunakan ID Conversation agar Pusher Channel-nya unik.
      */
-    public function show($id, Request $request)
+    // Di dalam App\Http\Controllers\ChatController.php
+    public function show($conversation_id, Request $request)
     {
-        $partner = User::findOrFail($id);
-        $userId = Auth::user()->id_pengguna;
-        $postingId = $request->query('posting_id');
-        $posting = $postingId ? Postingan::find($postingId) : null;
-
-        // Mark partner->me messages as read (scoped to posting if exists)
-        $query = Chat::where('sender_id', $id)
-            ->where('receiver_id', $userId)
-            ->where('is_read', false);
-            
-        if ($postingId) {
-            $query->where('id_posting', $postingId);
-        }
+        // 1. Ambil conversation beserta relasi user-nya
+        $conversation = Conversation::with(['userOne', 'userTwo'])->findOrFail($conversation_id);
         
-        $query->update(['is_read' => true]);
+        // 2. Tentukan user yang sedang login
+        $currentUser = Auth::user();
 
-        return view('pages.chat.show', compact('partner', 'posting'));
+        // 3. Tentukan LAWAN BICARA ($opponent)
+        // Jika saya user_one, maka lawan saya user_two, dan sebaliknya.
+        $opponent = ($conversation->user_one_id === $currentUser->id_pengguna) 
+                    ? $conversation->userTwo 
+                    : $conversation->userOne;
+
+        // 4. Logic Tombol Kembali (Optional)
+        $backUrl = $request->back_to_post 
+                ? route('postingan.show', $request->back_to_post) // Sesuaikan nama route detail postinganmu
+                : url('/dashboard'); // Default fallback
+
+        // 5. Update status "Read" (opsional, biar pesan jadi terbaca saat dibuka)
+        Message::where('conversation_id', $conversation->id)
+            ->where('sender_id', '!=', $currentUser->id_pengguna)
+            ->update(['is_read' => true]);
+
+        // === PERBAIKAN UTAMA ADA DI SINI ===
+        // Pastikan path view sesuai: 'pages.marketplace.chat.room'
+        // Dan variabel 'opponent' & 'currentUser' dikirim lewat compact()
+        return view('pages.marketplace.chat.room', compact('conversation', 'opponent', 'currentUser', 'backUrl'));
     }
 
     /**
-     * Store a new chat message.
+     * Store new message (API / Axios).
+     * Trigger Pusher Event di sini.
      */
     public function store(Request $request)
     {
         $request->validate([
-            'receiver_id' => 'required|exists:users,id_pengguna',
+            'conversation_id' => 'required|exists:conversations,id',
             'message' => 'required|string',
-            'id_posting' => 'nullable', // Should be validated if context is strictly required
         ]);
 
-        $chat = Chat::create([
+        // Simpan pesan
+        $message = Message::create([
+            'conversation_id' => $request->conversation_id,
             'sender_id' => Auth::user()->id_pengguna,
-            'receiver_id' => $request->receiver_id,
-            'id_posting' => $request->id_posting,
-            'message' => $request->message,
+            'body' => $request->message,
             'is_read' => false,
         ]);
 
-        return response()->json($chat);
+        // Broadcast ke Pusher (Real-time!)
+        // Pastikan Event MessageSent sudah dibuat seperti tutorial sebelumnya
+        broadcast(new MessageSent($message))->toOthers();
+
+        // Return JSON lengkap dengan data sender untuk frontend
+        return response()->json($message->load('sender'));
     }
 
     /**
-     * Fetch messages between authenticated user and partner (JSON).
+     * Fetch messages (API / Axios).
      */
-    public function fetch($id, Request $request)
+    public function fetch($conversationId)
     {
-        $userId = Auth::user()->id_pengguna;
-        $postingId = $request->query('posting_id');
+        // Ambil pesan berdasarkan ID Room
+        $messages = Message::where('conversation_id', $conversationId)
+            ->with('sender')
+            ->orderBy('created_at', 'asc')
+            ->get();
 
-        // Mark messages from partner to user as read
-        $markReadQuery = Chat::where('sender_id', $id)
-            ->where('receiver_id', $userId)
-            ->where('is_read', false);
+        return response()->json($messages);
+    }
 
-        if ($postingId) {
-            $markReadQuery->where('id_posting', $postingId);
-        }
-        $markReadQuery->update(['is_read' => true]);
+    public function sendMessage(Request $request, $conversation_id) 
+    {
+        // Validasi input
+        $request->validate([
+            'message' => 'required|string',
+        ]);
 
-        // Verify if postingId is needed for fetch
-        $messages = Chat::where(function($q) use ($userId, $id, $postingId) {
-             $q->where(function ($sub) use ($userId, $id) {
-                 $sub->where('sender_id', $userId)->where('receiver_id', $id);
-             })->orWhere(function ($sub) use ($userId, $id) {
-                 $sub->where('sender_id', $id)->where('receiver_id', $userId);
-             });
-        });
+        // Simpan pesan
+        $message = Message::create([
+            'conversation_id' => $conversation_id, // Ambil dari URL
+            'sender_id' => Auth::user()->id_pengguna,
+            'body' => $request->message,
+            'is_read' => false,
+        ]);
 
-        if ($postingId) {
-            $messages->where('id_posting', $postingId);
-        } else {
-            // Optional: if no postingId, maybe show only chats with null posting? 
-            // Or all chats? User request implies strict rooms. 
-            // We'll stick to strict filtering if provided, else null.
-             $messages->whereNull('id_posting');
-        }
+        // Broadcast ke Pusher
+        broadcast(new MessageSent($message))->toOthers();
 
-        $result = $messages->orderBy('created_at')->get();
-
-        return response()->json($result);
+        // Return JSON
+        return response()->json($message->load('sender'));
     }
 }
+
