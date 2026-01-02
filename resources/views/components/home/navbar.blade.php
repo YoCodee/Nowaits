@@ -61,8 +61,8 @@
 
     <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
         <a href="#" class="hover:text-white transition-colors">About Us</a>
-        <a href="#" class="hover:text-white transition-colors">Our Feature</a>
-        <a href="{{ route('calculator') }}" class="hover:text-white transition-colors">Calculation</a>
+        <a href="{{ route('marketplace.index') }}" class="hover:text-white transition-colors">Marketplace</a>
+        <a  class="hover:text-white transition-colors">Calculation</a>
         <a href="#" class="hover:text-white transition-colors">Contact Us</a>
     </div>
 
@@ -92,7 +92,7 @@
                     </div>
 
                     <div class="py-1">
-                        <a href="{{ route('home') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#022c22] group/item">
+                        <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#022c22] group/item">
                             <svg class="w-4 h-4 mr-3 text-gray-400 group-hover/item:text-[#022c22]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                             </svg>
@@ -140,7 +140,7 @@
 
         <a href="#" class="mobile-link text-2xl font-bold hover:text-[#bef264] transition-colors">About Us</a>
         <a href="#" class="mobile-link text-2xl font-bold hover:text-[#bef264] transition-colors">Our Feature</a>
-        <a href="{{ route('calculator') }}" class="mobile-link text-2xl font-bold hover:text-[#bef264] transition-colors">Calculation</a>
+        <a  class="mobile-link text-2xl font-bold hover:text-[#bef264] transition-colors">Calculation</a>
         <a href="#" class="mobile-link text-2xl font-bold hover:text-[#bef264] transition-colors">Contact Us</a>
 
         <div class="w-16 h-1 bg-white/10 rounded-full mobile-link"></div>
@@ -154,7 +154,7 @@
                     <p class="text-xl font-bold">{{ Auth::user()->name }}</p>
                     <p class="text-sm text-gray-400">{{ Auth::user()->email }}</p>
                 </div>
-                 <a href="{{ route('home') }}" class="text-lg hover:text-[#bef264]">My Dashboard</a>
+                 <a href="{{ route('dashboard') }}" class="text-lg hover:text-[#bef264]">My Dashboard</a>
                 <a href="{{ route('profile.edit') }}" class="text-lg hover:text-[#bef264]">My Profile</a>
                 <form action="{{ route('logout') }}" method="POST" class="w-full max-w-xs">
                     @csrf
@@ -203,6 +203,7 @@
                 tl.play();
                 // Change icon to X
                 gsap.to(btn, { rotation: 90, duration: 0.3 });
+                // We'll trust the clip-path handling, but for accessibility we might want to handle aria-expanded
             } else {
                 tl.reverse();
                 // Change icon back

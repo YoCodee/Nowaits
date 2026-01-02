@@ -11,14 +11,12 @@
 <body class="bg-gray-50 text-gray-800 antialiased">
 
 
-    @include('components.navbar')
-
-
     <main class="container mx-auto px-4 py-8">
         @yield('content')
     </main>
 
 
 
+    @stack('scripts')
 </body>
 </html>

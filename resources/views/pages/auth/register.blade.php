@@ -44,9 +44,9 @@
                                 <input type="radio" name="role" value="farmer" class="peer sr-only" checked>
                                 <div
                                     class="border-2 border-gray-300 rounded-xl p-4 flex items-center justify-between hover:bg-gray-50 peer-checked:border-gray-900 peer-checked:bg-gray-50 transition">
-                                    <span class="font-bold text-gray-800 text-sm">Farmer</span>
+                                    <span class="font-bold text-gray-800 text-sm">Petani</span>
                                     <div
-                                        class="w-5 h-5 rounded-full border-2 border-gray-300 peer-checked:bg-orange-400 peer-checked:border-orange-400 bg-orange-400">
+                                        class="w-5 h-5 rounded-full border-2 border-gray-300 bg-white peer-checked:bg-orange-400 peer-checked:border-orange-400">
                                     </div>
                                 </div>
                             </label>

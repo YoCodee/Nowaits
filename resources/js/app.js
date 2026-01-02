@@ -1,9 +1,18 @@
 import "./bootstrap";
+import Alpine from "alpinejs";
+
+window.Alpine = Alpine;
+
+Alpine.start();
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Contoh penggunaan:
-// gsap.to(".box", { rotation: 27, x: 100, duration: 1 });
+// Optional: GLOBAL usage for testing in browser console
+window.gsap = gsap;
+window.ScrollTrigger = ScrollTrigger;
+
+import Lenis from "lenis";
+window.Lenis = Lenis;

@@ -1,46 +1,52 @@
-@extends('layouts.app')
+@extends('layouts.landing')
 
 @section('title', 'Home')
 
 @section('content')
-<!-- Hero Section -->
-<section class="text-center py-12">
-    <h1 class="text-4xl font-extrabold text-green-700 mb-4">Solusi Pertanian Tanpa Waste</h1>
-    <p class="text-lg text-gray-600 mb-8">Jual hasil panenmu, temukan mitra, dan hitung keuntunganmu di sini.</p>
-    
-    <div class="flex justify-center gap-4">
-        <!-- TODO: Teman -> Perbaiki link tombol CTA (Call to Action) ini -->
-        <button class="px-6 py-3 bg-green-600 text-white font-semibold rounded hover:bg-green-700">Mulai Jual Panen</button>
-        <button class="px-6 py-3 bg-white border border-green-600 text-green-600 font-semibold rounded hover:bg-green-50">Gabung Mitra</button>
-    </div>
-</section>
+<div class="bg-[white] min-h-screen text-black font-sans overflow-x-hidden selection:bg-[#bef264] selection:text-[#022c22]" id="home-container">
 
-<!-- Features Section -->
-<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-    
-    <!-- Feature: Calculator -->
-    <div class="bg-white p-6 rounded-lg shadow border border-gray-100">
-        <h3 class="text-xl font-bold mb-2">Kalkulator Petani</h3>
-        <p class="text-gray-500 mb-4">Hitung estimasi keuntungan penjualan mandiri vs mitra.</p>
-        <!-- TODO: Teman -> Link ke halaman kalkulator -->
-        <a href="{{ route('calculator') }}" class="text-green-600 font-medium hover:underline">Coba Hitung &rarr;</a>
-    </div>
+    <div id="page-transition-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #bef264; z-index: 9999; transform: scaleY(1); transform-origin: top;"></div>
 
-    <!-- Feature: Mitra Link -->
-    <div class="bg-white p-6 rounded-lg shadow border border-gray-100">
-        <h3 class="text-xl font-bold mb-2">Jaringan Mitra</h3>
-        <p class="text-gray-500 mb-4">Kerja sama dengan mitra tepercaya untuk distribusi.</p>
-        <!-- TODO: Teman -> Link ke halaman daftar mitra -->
-        <a href="#" class="text-green-600 font-medium hover:underline">Lihat Mitra &rarr;</a>
-    </div>
+    <script type="module">
+        document.addEventListener("DOMContentLoaded", () => {
+            const overlay = document.getElementById('page-transition-overlay');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasTransition = urlParams.get('transition');
 
-    <!-- Feature: Tracking -->
-    <div class="bg-white p-6 rounded-lg shadow border border-gray-100">
-        <h3 class="text-xl font-bold mb-2">Lacak Kurir</h3>
-        <p class="text-gray-500 mb-4">Pantau pengiriman hasil panen secara real-time.</p>
-        <!-- TODO: Teman -> Link ke halaman tracking -->
-        <a href="{{ route('tracking') }}" class="text-green-600 font-medium hover:underline">Lacak Paket &rarr;</a>
-    </div>
+            if (hasTransition === 'true') {
 
-</div>
-@endsection
+                setTimeout(() => {
+                    window.gsap.to(overlay, {
+                        scaleY: 0,
+                        duration: 1.2,
+                        ease: "power4.inOut",
+                        onComplete: () => {
+                            overlay.style.display = 'none';
+                        }
+                    });
+                }, 200);
+            } else {
+
+                overlay.style.display = 'none';
+            }
+        });
+    </script>
+
+    @include('components.home.navbar')
+
+
+    <main class="pb-12   mx-auto w-full flex flex-col items-center">
+        <div class="px-6 md:px-12 max-w-7xl w-full">
+            @include('components.home.hero')
+            @include('components.home.marquee')
+            @include('components.home.about')
+        </div>
+
+     @include('components.home.features')
+    @include('components.home.role-section')
+    @include('components.home.criteria-section')
+    @include('components.home.impact-section')
+    @include('components.home.testimonial-section')
+    @include('components.home.faq-section')
+    </main>
+    </div>
