@@ -191,8 +191,8 @@
         <div class="bg-green-50 p-8 rounded-2xl border border-green-100 inline-block w-full">
             <h3 class="text-xl font-bold text-green-900 mb-2">Siap Berkontribusi?</h3>
             <p class="text-green-800 mb-6">Bergabunglah dengan ratusan petani lainnya.</p>
-            <a href="{{ route('register') }}" class="inline-block w-full md:w-auto px-10 py-4 bg-green-600 text-white font-bold text-lg rounded-full shadow-lg hover:bg-green-700 transition transform hover:-translate-y-1">
-                Daftar Jadi Petani Sekarang
+            <a href="{{ Auth::check() ? route('dashboard') : route('register') }}" class="inline-block w-full md:w-auto px-10 py-4 bg-green-600 text-white font-bold text-lg rounded-full shadow-lg hover:bg-green-700 transition transform hover:-translate-y-1">
+                {{ Auth::check() ? 'Ke Dashboard' : 'Daftar Jadi Petani Sekarang' }}
             </a>
             <p class="text-xs text-green-600 mt-4">*Pendaftaran 100% Gratis.</p>
         </div>

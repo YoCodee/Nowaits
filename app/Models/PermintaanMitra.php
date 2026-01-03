@@ -19,7 +19,9 @@ class PermintaanMitra extends Model
         'nama_buah_dicari',
         'jumlah_dicari_kg',
         'harga_ajuan_per_kg',
-        'min_skor_kualitas',
+        'min_skor_kulit',
+        'min_skor_bentuk',
+        'min_skor_tekstur',
         'deskripsi_tambahan',
         'status_tawaran',
     ];

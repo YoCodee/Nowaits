@@ -10,7 +10,11 @@ Route::get('/', function () {
 })->name('intro');
 
 Route::get('/home', function () {
-    return view('pages.home');
+    $wasteSavedKg = \App\Models\Transaksi::where('status', 'selesai')->sum('jumlah_kg');
+    $pendapatanPetani = \App\Models\Transaksi::where('status', 'selesai')->sum('total_harga_barang');
+    $mitraAktif = \App\Models\User::where('peran', 'mitra')->count();
+
+    return view('pages.home', compact('wasteSavedKg', 'pendapatanPetani', 'mitraAktif'));
 })->name('home');
 
 Route::get('/login', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login');
@@ -44,6 +48,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/transaksi/{id}/confirm', [App\Http\Controllers\TransaksiController::class, 'confirmOrder'])->name('transaksi.confirm');
     Route::post('/transaksi/{id}/ship', [App\Http\Controllers\TransaksiController::class, 'shipOrder'])->name('transaksi.ship');
+    Route::get('/transaksi/{id}/track', [App\Http\Controllers\TransaksiController::class, 'trackOrder'])->name('transaksi.track');
 
     Route::get('/marketplace/{id}/checkout', [App\Http\Controllers\TransaksiController::class, 'checkout'])->name('transaksi.checkout');
     Route::post('/transaksi', [App\Http\Controllers\TransaksiController::class, 'store'])->name('transaksi.store');

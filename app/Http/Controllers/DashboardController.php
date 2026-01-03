@@ -21,9 +21,13 @@ class DashboardController extends Controller
         if ($role === 'petani') {
             // ... (Existing Petani Logic)
             $statuses = ['dikirim', 'selesai'];
-            $pendapatan = Transaksi::where('id_penjual', $user->id_pengguna)
+            $pendapatanKotor = Transaksi::where('id_penjual', $user->id_pengguna)
                 ->whereIn('status', $statuses)
                 ->sum('total_bayar');
+
+            $pendapatanBersih = Transaksi::where('id_penjual', $user->id_pengguna)
+                ->whereIn('status', $statuses)
+                ->sum('total_harga_barang');
 
             $buahTerjual = Transaksi::where('id_penjual', $user->id_pengguna)
                 ->whereIn('status', $statuses)
@@ -38,7 +42,8 @@ class DashboardController extends Controller
                 ->get();
 
             $viewData = array_merge($viewData, [
-                'pendapatan' => $pendapatan,
+                'pendapatanKotor' => $pendapatanKotor,
+                'pendapatanBersih' => $pendapatanBersih,
                 'buahTerjual' => $buahTerjual,
                 'stok' => $stok,
                 'pesananTerbaru' => $pesananTerbaru

@@ -40,6 +40,11 @@ class MarketplaceController extends Controller
                 $q->where('skor_tekstur', '>=', $request->min_tekstur);
             });
         }
+        if ($request->has('max_price')) {
+            $querySupply->whereHas('buah', function ($q) use ($request) {
+                $q->where('harga_akhir', '<=', $request->max_price);
+            });
+        }
         
         $supplies = $querySupply->latest()->get();
 
@@ -71,6 +76,16 @@ class MarketplaceController extends Controller
             ->where('id_posting', $id)
             ->firstOrFail();
 
-        return view('pages.marketplace.show', compact('postingan'));
+        // Fetch other products from the same farmer
+        $moreProducts = Postingan::with(['buah.penilaian', 'user'])
+            ->where('id_pengguna', $postingan->id_pengguna)
+            ->where('id_posting', '!=', $id)
+            ->where('status', 'aktif')
+            ->where('tipe_postingan', 'jual')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('pages.marketplace.show', compact('postingan', 'moreProducts'));
     }
 }

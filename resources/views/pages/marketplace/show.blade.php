@@ -132,9 +132,58 @@
             <!-- More from Seller (Optional placeholder) -->
             <div class="mt-16">
                 <h3 class="font-bold text-xl text-gray-800 mb-6">Produk Lain dari Petani Ini</h3>
-                 <div class="bg-gray-50 rounded-2xl p-8 text-center text-gray-400 border border-gray-200 border-dashed">
-                    Segera Hadir
-                </div>
+                @if($moreProducts->count() > 0)
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        @foreach($moreProducts as $product)
+                            <a href="{{ route('marketplace.show', $product->id_posting) }}" class="block bg-white rounded-[2rem] p-4 shadow-sm hover:shadow-lg transition-all duration-300 group flex flex-col relative h-full border border-gray-100 hover:border-gray-200">
+                                <!-- Image Area -->
+                                <div class="relative bg-[#f8f8f8] rounded-[1.5rem] mb-4 overflow-hidden h-48">
+                                    @if($product->buah->gambar)
+                                        <img src="{{ asset('storage/' . $product->buah->gambar) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                    @else
+                                        <div class="flex items-center justify-center h-full text-gray-400">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                                        </div>
+                                    @endif
+
+                                    @if($product->buah->stok > 0)
+                                        <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1 text-[#022c22]">
+                                            ★ {{ number_format($product->buah->penilaian->total_skor_akhir * 5, 1) }}
+                                        </div>
+                                    @else
+                                        <div class="absolute inset-0 bg-black/10 flex items-center justify-center">
+                                            <span class="bg-red-500 text-white px-3 py-1 rounded-lg text-sm font-bold shadow-sm transform -rotate-6">Habis Terjual</span>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- Content -->
+                                <h3 class="font-bold text-gray-800 text-md mb-1 line-clamp-2 leading-tight group-hover:text-[#022c22]">
+                                    {{ $product->judul_posting }}
+                                </h3>
+                                <p class="text-xs text-gray-500 mb-4">{{ $product->buah->nama_buah }}</p>
+
+                                <div class="mt-auto flex items-center justify-between">
+                                    <div class="flex flex-col">
+                                        @if($product->buah->harga_awal > $product->buah->harga_akhir)
+                                            <span class="text-xs text-gray-400 line-through">Rp {{ number_format($product->buah->harga_awal, 0, ',', '.') }}</span>
+                                        @endif
+                                        <div class="text-[#022c22] font-bold">
+                                            Rp {{ number_format($product->buah->harga_akhir, 0, ',', '.') }} <span class="text-[10px] font-normal text-gray-400">/kg</span>
+                                        </div>
+                                    </div>
+                                    <div class="w-8 h-8 bg-gray-50 text-gray-400 rounded-full flex items-center justify-center hover:bg-[#bef264] hover:text-[#022c22] transition-all">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                    </div>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="bg-gray-50 rounded-2xl p-8 text-center text-gray-400 border border-gray-200 border-dashed">
+                        Belum ada produk lain dari petani ini.
+                    </div>
+                @endif
             </div>
         </div>
     </div>

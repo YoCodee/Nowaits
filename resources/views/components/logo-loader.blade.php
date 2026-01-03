@@ -60,14 +60,21 @@
         // Hide main scrollbar during loading
         document.body.style.overflow = 'hidden';
 
-        setTimeout(() => {
-            const gsap = window.gsap;
-            if (!gsap) return;
+        const checkGsap = setInterval(() => {
+            if (window.gsap) {
+                clearInterval(checkGsap);
+                initLogoAnimation(window.gsap);
+            }
+        }, 50);
 
+        // Stop checking after 5 seconds to avoid infinite loop
+        setTimeout(() => clearInterval(checkGsap), 5000);
+
+        function initLogoAnimation(gsap) {
             const logoContainer = document.querySelector("#initial-loader");
 
             // --- CONSTANTS ---
-            const duration = 1.5;
+            const duration = 0.6;
             const ease = "power3.inOut";
 
             const no_to_S0 = { x: -114, y: -162, opacity: 0 };
@@ -195,8 +202,7 @@
                     ease: "power2.in"
                 });
 
-            }, 10000);
-
-        }, 100); // Short delay to ensure window.gsap is populated if using defer
+            }, 4000);
+        } // Short delay to ensure window.gsap is populated if using defer
     });
 </script>

@@ -4,11 +4,24 @@
     @if($role === 'petani')
         {{-- Existing Petani Dashboard --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <x-dashboard.stats-card title="Total Pendapatan" value="Rp {{ number_format($pendapatan, 0, ',', '.') }}" subtext="Total semua transaksi sukses" trend="12">
-                <x-slot name="icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                </x-slot>
-            </x-dashboard.stats-card>
+
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-green-50 rounded-xl text-green-600 group-hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-gray-500 mb-1">Total Pendapatan</p>
+                    <h3 class="text-2xl font-bold text-[#022c22] mb-1">Rp {{ number_format($pendapatanBersih, 0, ',', '.') }}</h3>
+                    <p class="text-xs text-gray-400">Bersih (Tanpa Ongkir)</p>
+                    
+                    <div class="mt-3 pt-3 border-t border-gray-100 flex justify-between items-center bg-gray-50/50 p-2 rounded-lg">
+                        <span class="text-xs text-gray-500 font-medium">Kotor (Total Masuk)</span>
+                        <span class="text-xs font-bold text-gray-700">Rp {{ number_format($pendapatanKotor, 0, ',', '.') }}</span>
+                    </div>
+                </div>
+            </div>
             <x-dashboard.stats-card title="Buah Terjual" value="{{ number_format($buahTerjual, 0, ',', '.') }} kg" subtext="Total terjual via Marketplace" trend="8">
                 <x-slot name="icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
@@ -86,9 +99,9 @@
                 <h3 class="text-blue-900 font-bold text-lg mb-1">Stok Apel di Malang sedang melimpah!</h3>
                 <p class="text-blue-700 text-sm">Harga turun 15% dari minggu lalu. Waktu yang tepat untuk restock.</p>
             </div>
-            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow hover:bg-blue-700">
+            <a href="{{ route('marketplace.index') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow hover:bg-blue-700">
                 Lihat Pasar
-            </button>
+            </a>
         </div>
 
         <h3 class="font-bold text-lg mb-4 text-[#022c22]">Permintaan Anda</h3>

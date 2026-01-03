@@ -25,51 +25,65 @@
 
                     <div>
                         <label for="name" class="block text-sm font-semibold text-gray-900 mb-3">Nama Lengkap</label>
-                        <input type="text" name="name" id="name" placeholder="nama KTP"
-                            class="w-full border-2 border-gray-300 rounded-2xl px-5 py-3.5 text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition placeholder-gray-400 text-sm"
+                        <input type="text" name="name" id="name" placeholder="nama KTP" value="{{ old('name') }}"
+                            class="w-full border-2 border-gray-300 rounded-2xl px-5 py-3.5 text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition placeholder-gray-400 text-sm @error('name') border-red-500 ring-red-200 @enderror"
                             required>
+                        @error('name')
+                            <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label for="email" class="block text-sm font-semibold text-gray-900 mb-3">Your Email</label>
-                        <input type="email" name="email" id="email" placeholder="user123@example.com"
-                            class="w-full border-2 border-gray-300 rounded-2xl px-5 py-3.5 text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition placeholder-gray-400 text-sm"
+                        <input type="email" name="email" id="email" placeholder="user123@example.com" value="{{ old('email') }}"
+                            class="w-full border-2 border-gray-300 rounded-2xl px-5 py-3.5 text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition placeholder-gray-400 text-sm @error('email') border-red-500 ring-red-200 @enderror"
                             required>
+                        @error('email')
+                            <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-semibold text-gray-900 mb-3">Role</label>
                         <div class="flex gap-3">
                             <label class="cursor-pointer flex-1">
-                                <input type="radio" name="role" value="farmer" class="peer sr-only" checked>
+                                <input type="radio" name="role" value="farmer" class="peer sr-only" {{ old('role', 'farmer') == 'farmer' ? 'checked' : '' }}>
                                 <div
-                                    class="border-2 border-gray-300 rounded-xl p-4 flex items-center justify-between hover:bg-gray-50 peer-checked:border-gray-900 peer-checked:bg-gray-50 transition">
+                                    class="border-2 border-gray-300 rounded-xl p-4 flex items-center justify-between hover:bg-gray-50 peer-checked:border-gray-900 peer-checked:bg-gray-50 transition peer-checked:[&_.circle-outer]:border-orange-400 peer-checked:[&_.circle-inner]:scale-100">
                                     <span class="font-bold text-gray-800 text-sm">Petani</span>
                                     <div
-                                        class="w-5 h-5 rounded-full border-2 border-gray-300 bg-white peer-checked:bg-orange-400 peer-checked:border-orange-400">
+                                        class="circle-outer w-5 h-5 rounded-full border-2 border-gray-300 bg-white flex items-center justify-center transition-colors">
+                                        <div class="circle-inner w-2.5 h-2.5 rounded-full bg-orange-400 scale-0 transition-transform duration-200"></div>
                                     </div>
                                 </div>
                             </label>
 
                             <label class="cursor-pointer flex-1">
-                                <input type="radio" name="role" value="mitra" class="peer sr-only">
+                                <input type="radio" name="role" value="mitra" class="peer sr-only" {{ old('role') == 'mitra' ? 'checked' : '' }}>
                                 <div
-                                    class="border-2 border-gray-300 rounded-xl p-4 flex items-center justify-between hover:bg-gray-50 peer-checked:border-gray-900 peer-checked:bg-gray-50 transition">
+                                    class="border-2 border-gray-300 rounded-xl p-4 flex items-center justify-between hover:bg-gray-50 peer-checked:border-gray-900 peer-checked:bg-gray-50 transition peer-checked:[&_.circle-outer]:border-orange-400 peer-checked:[&_.circle-inner]:scale-100">
                                     <span class="font-bold text-gray-800 text-sm">Mitra</span>
                                     <div
-                                        class="w-5 h-5 rounded-full border-2 border-gray-300 bg-white peer-checked:bg-orange-400 peer-checked:border-orange-400">
+                                        class="circle-outer w-5 h-5 rounded-full border-2 border-gray-300 bg-white flex items-center justify-center transition-colors">
+                                        <div class="circle-inner w-2.5 h-2.5 rounded-full bg-orange-400 scale-0 transition-transform duration-200"></div>
                                     </div>
                                 </div>
                             </label>
                         </div>
+                        @error('role')
+                            <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
+                        @enderror
                         <p class="text-xs text-gray-500 mt-2">*Choose this if you want to sell your fruits</p>
                     </div>
 
                     <div>
                         <label for="password" class="block text-sm font-semibold text-gray-900 mb-3">Password</label>
                         <input type="password" name="password" id="password" placeholder="••••••••"
-                            class="w-full border-2 border-gray-300 rounded-2xl px-5 py-3.5 text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition placeholder-gray-400 text-sm tracking-widest"
+                            class="w-full border-2 border-gray-300 rounded-2xl px-5 py-3.5 text-gray-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition placeholder-gray-400 text-sm tracking-widest @error('password') border-red-500 ring-red-200 @enderror"
                             required>
+                        @error('password')
+                            <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>

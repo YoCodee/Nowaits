@@ -27,8 +27,12 @@
                 <span class="font-bold text-gray-800 text-lg">Rp {{ number_format($permintaan->harga_ajuan_per_kg, 0, ',', '.') }}</span>
             </div>
             <div>
-                <span class="block text-gray-400 text-xs mb-1">Min. Kualitas</span>
-                <span class="font-bold text-gray-800 text-lg">{{ $permintaan->min_skor_kualitas * 100 }}%</span>
+                <span class="block text-gray-400 text-xs mb-1">Min. Kriteria (0-1)</span>
+                <div class="flex gap-2 text-xs font-bold text-gray-800">
+                    <span title="Kulit" class="bg-gray-100 px-2 py-1 rounded">K: {{ $permintaan->min_skor_kulit }}</span>
+                    <span title="Bentuk" class="bg-gray-100 px-2 py-1 rounded">B: {{ $permintaan->min_skor_bentuk }}</span>
+                    <span title="Tekstur" class="bg-gray-100 px-2 py-1 rounded">T: {{ $permintaan->min_skor_tekstur }}</span>
+                </div>
             </div>
             <div>
                  <span class="block text-gray-400 text-xs mb-1">Dibuat Pada</span>
@@ -88,13 +92,13 @@
                         @if($offer->status == 'pending')
                             <form action="{{ route('penawaran.accept', $offer->id_penawaran) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="w-full bg-[#022c22] text-white py-2 rounded-xl font-bold text-sm hover:bg-[#bef264] hover:text-[#022c22] transition-colors">
+                                <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menerima tawaran ini?');" class="w-full bg-[#022c22] text-white py-2 rounded-xl font-bold text-sm hover:bg-[#bef264] hover:text-[#022c22] transition-colors">
                                     Terima Tawaran
                                 </button>
                             </form>
                             <form action="{{ route('penawaran.reject', $offer->id_penawaran) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="w-full border border-red-200 text-red-600 py-2 rounded-xl font-bold text-sm hover:bg-red-50 transition-colors">
+                                <button type="submit" onclick="return confirm('Yakin ingin menolak tawaran ini?');" class="w-full border border-red-200 text-red-600 py-2 rounded-xl font-bold text-sm hover:bg-red-50 transition-colors">
                                     Tolak
                                 </button>
                             </form>
@@ -107,13 +111,13 @@
                                 $listing = \App\Models\Postingan::where('id_buah', $offer->id_buah)
                                     ->where('judul_posting', 'LIKE', 'Penawaran Khusus%')
                                     ->first();
-                                $hasTransaction = $listing ? \App\Models\Transaksi::where('id_postingan', $listing->id_posting)->exists() : false;
+                                $transaction = $listing ? \App\Models\Transaksi::where('id_postingan', $listing->id_posting)->first() : null;
                             @endphp
 
-                            @if($hasTransaction)
-                                <div class="block w-full bg-gray-100 text-gray-500 py-2 rounded-xl font-bold text-sm text-center cursor-not-allowed">
-                                    Sudah Dibayar
-                                </div>
+                            @if($transaction)
+                                <a href="{{ route('transaksi.index') }}" class="block w-full bg-blue-50 text-blue-700 border border-blue-100 py-2 rounded-xl font-bold text-sm text-center hover:bg-blue-100 transition-colors">
+                                    Lihat Pesanan
+                                </a>
                             @else
                                 <a href="{{ route('penawaran.checkout', $offer->id_penawaran) }}" class="block w-full bg-[#022c22] text-[#bef264] py-2 rounded-xl font-bold text-sm text-center hover:bg-[#033a2d]">
                                     Lanjut Bayar

@@ -40,20 +40,57 @@
                     </div>
                 </div>
 
-                <!-- Min Skor Kualitas -->
-                <div class="space-y-2">
-                     <div class="flex justify-between mb-2">
-                        <label class="text-sm font-bold text-gray-700">Minimal Kualitas (Skor)</label>
-                        <span class="text-[#022c22] font-bold" id="val_skor">0.8</span>
+                <!-- Kriteria Kualitas Detail -->
+                <div class="space-y-6 pt-4 border-t border-gray-100">
+                    <h3 class="font-bold text-gray-800">Kriteria Kualitas Minimal</h3>
+                    <p class="text-sm text-gray-500 bg-blue-50 p-3 rounded-xl border border-blue-100">
+                        Petani hanya bisa memberikan penawaran jika stok mereka memenuhi minimal skor kriteria ini.
+                    </p>
+
+                    <!-- Kulit -->
+                    <div class="space-y-2">
+                         <div class="flex justify-between mb-2">
+                            <label class="text-sm font-bold text-gray-700">Minimal Skor Kulit</label>
+                            <span class="text-[#022c22] font-bold" id="val_kulit">0.5</span>
+                        </div>
+                        <input type="range" name="min_skor_kulit" min="0" max="1" step="0.1" value="{{ old('min_skor_kulit', 0.5) }}" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#bef264]" oninput="document.getElementById('val_kulit').innerText = this.value">
+                        <div class="flex justify-between text-xs text-gray-400 mt-1 font-medium">
+                            <span>0: Apa Saja</span>
+                            <span>0.5: Standar</span>
+                            <span>1: Mulus</span>
+                        </div>
+                        @error('min_skor_kulit') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
-                    <input type="range" name="min_skor_kualitas" min="0" max="1" step="0.1" value="{{ old('min_skor_kualitas', 0.8) }}" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#bef264]" oninput="document.getElementById('val_skor').innerText = this.value">
-                    <div class="flex justify-between text-xs text-gray-400 mt-1 font-medium">
-                        <span>0: Apa Saja</span>
-                        <span>0.5: Standar</span>
-                        <span>1: Premium</span>
+
+                    <!-- Bentuk -->
+                    <div class="space-y-2">
+                         <div class="flex justify-between mb-2">
+                            <label class="text-sm font-bold text-gray-700">Minimal Skor Bentuk</label>
+                            <span class="text-[#022c22] font-bold" id="val_bentuk">0.5</span>
+                        </div>
+                        <input type="range" name="min_skor_bentuk" min="0" max="1" step="0.1" value="{{ old('min_skor_bentuk', 0.5) }}" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#bef264]" oninput="document.getElementById('val_bentuk').innerText = this.value">
+                        <div class="flex justify-between text-xs text-gray-400 mt-1 font-medium">
+                            <span>0: Apa Saja</span>
+                            <span>0.5: Standar</span>
+                            <span>1: Sempurna</span>
+                        </div>
+                        @error('min_skor_bentuk') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
-                     <p class="text-xs text-blue-500 mt-2">Hanya penawaran dengan skor kualitas di atas nilai ini yang akan cocok.</p>
-                    @error('min_skor_kualitas') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+
+                    <!-- Tekstur -->
+                    <div class="space-y-2">
+                         <div class="flex justify-between mb-2">
+                            <label class="text-sm font-bold text-gray-700">Minimal Skor Tekstur</label>
+                            <span class="text-[#022c22] font-bold" id="val_tekstur">0.5</span>
+                        </div>
+                        <input type="range" name="min_skor_tekstur" min="0" max="1" step="0.1" value="{{ old('min_skor_tekstur', 0.5) }}" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#bef264]" oninput="document.getElementById('val_tekstur').innerText = this.value">
+                        <div class="flex justify-between text-xs text-gray-400 mt-1 font-medium">
+                            <span>0: Apa Saja</span>
+                            <span>0.5: Standar</span>
+                            <span>1: Segar/Keras</span>
+                        </div>
+                        @error('min_skor_tekstur') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
                 </div>
 
                 <!-- Deskripsi -->
@@ -70,3 +107,7 @@
         </form>
     </div>
 </x-dashboard-layout>
+
+
+
+

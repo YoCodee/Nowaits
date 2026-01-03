@@ -1,4 +1,4 @@
-<section class="bg-white py-16 md:py-24 px-6 md:px-12 w-full text-[#022c22] rounded-t-[2rem] md:rounded-t-[3rem] -mt-10 relative z-20">
+<section id="about-us" class="bg-white py-16 md:py-24 px-6 md:px-12 w-full text-[#022c22] rounded-t-[2rem] md:rounded-t-[3rem] -mt-10 relative z-20">
     <div class="max-w-7xl mx-auto">
         {{-- Header Section --}}
         <div class="flex flex-col lg:flex-row justify-between gap-8 md:gap-12 mb-12 md:mb-20">
