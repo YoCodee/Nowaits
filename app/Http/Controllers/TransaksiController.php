@@ -72,6 +72,11 @@ class TransaksiController extends Controller
     {
         $request->validate([
             'bukti_bayar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ], [
+            'bukti_bayar.required' => 'Mohon unggah foto bukti pembayaran.',
+            'bukti_bayar.image' => 'File harus berupa gambar.',
+            'bukti_bayar.mimes' => 'Format file harus berupa jpeg, png, atau jpg.',
+            'bukti_bayar.max' => 'Ukuran file tidak boleh lebih dari 2MB. Silakan kompres gambar Anda.',
         ]);
 
         $transaksi = Transaksi::findOrFail($id);
@@ -172,6 +177,32 @@ class TransaksiController extends Controller
     }
 
     /**
+     * Track Order Map
+     */
+    public function trackOrder($id)
+    {
+        $transaksi = Transaksi::with(['postingan.buah', 'penjual.alamatPengguna', 'pembeli.alamatPengguna', 'pengiriman'])
+            ->findOrFail($id);
+
+        $user = Auth::user();
+
+        // Access Control
+        if ($user->id_pengguna !== $transaksi->id_pembeli && $user->id_pengguna !== $transaksi->id_penjual) {
+            abort(403);
+        }
+
+        // Get Coordinates
+        $sellerLat = $transaksi->penjual->alamatPengguna->latitude;
+        $sellerLng = $transaksi->penjual->alamatPengguna->longitude;
+        
+        // Prefer snapshot if available, else current profile
+        $buyerLat = $transaksi->alamat_pengiriman_snapshot['latitude'] ?? $transaksi->pembeli->alamatPengguna->latitude;
+        $buyerLng = $transaksi->alamat_pengiriman_snapshot['longitude'] ?? $transaksi->pembeli->alamatPengguna->longitude;
+
+        return view('pages.dashboard.transaksi.track', compact('transaksi', 'sellerLat', 'sellerLng', 'buyerLat', 'buyerLng'));
+    }
+
+    /**
      * Display checkout page for a specific product.
      */
     public function checkout($id)
@@ -264,7 +295,8 @@ class TransaksiController extends Controller
         }
 
         $totalHargaBarang = $pricePerKg * $request->jumlah_kg;
-        $totalBayar = $totalHargaBarang + $ongkir;
+        $biayaAdmin = ceil($totalHargaBarang * 0.025);
+        $totalBayar = $totalHargaBarang + $ongkir + $biayaAdmin;
 
         $transaksi = Transaksi::create([
             'id_postingan' => $postingan->id_posting,

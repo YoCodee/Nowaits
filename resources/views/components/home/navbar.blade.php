@@ -60,10 +60,10 @@
     </div>
 
     <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-        <a href="#" class="hover:text-white transition-colors">About Us</a>
+        <a href="{{ request()->routeIs('home') ? '#about-us' : route('home').'#about-us' }}" class="hover:text-white transition-colors">About Us</a>
+        <a href="{{ request()->routeIs('home') ? '#features' : route('home').'#features' }}" class="hover:text-white transition-colors">Features</a>
         <a href="{{ route('marketplace.index') }}" class="hover:text-white transition-colors">Marketplace</a>
-        <a  class="hover:text-white transition-colors">Calculation</a>
-        <a href="#" class="hover:text-white transition-colors">Contact Us</a>
+        <a href="{{ request()->routeIs('home') ? '#testimonial-section' : route('home').'#testimonial-section' }}" class="hover:text-white transition-colors">Testimonial</a>
     </div>
 
     @auth
@@ -138,10 +138,10 @@
     <div id="mobile-menu" class="fixed inset-0 bg-[#022c22] text-white z-40 flex flex-col justify-center items-center gap-8"
         style="clip-path: circle(0% at 100% 0%); -webkit-clip-path: circle(0% at 100% 0%);">
 
-        <a href="#" class="mobile-link text-2xl font-bold hover:text-[#bef264] transition-colors">About Us</a>
-        <a href="#" class="mobile-link text-2xl font-bold hover:text-[#bef264] transition-colors">Our Feature</a>
-        <a  class="mobile-link text-2xl font-bold hover:text-[#bef264] transition-colors">Calculation</a>
-        <a href="#" class="mobile-link text-2xl font-bold hover:text-[#bef264] transition-colors">Contact Us</a>
+        <a href="{{ request()->routeIs('home') ? '#about-us' : route('home').'#about-us' }}" class="mobile-link text-2xl font-bold hover:text-[#bef264] transition-colors">About Us</a>
+        <a href="{{ request()->routeIs('home') ? '#features' : route('home').'#features' }}" class="mobile-link text-2xl font-bold hover:text-[#bef264] transition-colors">Features</a>
+        <a href="{{ route('marketplace.index') }}" class="mobile-link text-2xl font-bold hover:text-[#bef264] transition-colors">Marketplace</a>
+        <a href="{{ request()->routeIs('home') ? '#testimonial-section' : route('home').'#testimonial-section' }}" class="mobile-link text-2xl font-bold hover:text-[#bef264] transition-colors">Testimonial</a>
 
         <div class="w-16 h-1 bg-white/10 rounded-full mobile-link"></div>
 

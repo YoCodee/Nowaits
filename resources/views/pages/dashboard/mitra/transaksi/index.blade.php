@@ -80,9 +80,10 @@
                                             </a>
                                         @elseif($trx->status === 'dikirim' || $trx->status === 'selesai')
                                             @if($trx->pengiriman)
-                                                <button @click="showTrackModal = true; selectedTrx = {{ json_encode($trx->pengiriman) }}" class="inline-block bg-purple-50 text-purple-700 border border-purple-200 px-3 py-2 rounded-lg text-xs font-bold hover:bg-purple-100 transition-colors">
+                                                <a href="{{ route('transaksi.track', $trx->id_transaksi) }}" class="inline-block bg-purple-50 text-purple-700 border border-purple-200 px-3 py-2 rounded-lg text-xs font-bold hover:bg-purple-100 transition-colors flex items-center justify-center gap-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
                                                     Lacak Paket
-                                                </button>
+                                                </a>
                                             @endif
                                             @if($trx->status === 'dikirim')
                                                 <form action="{{ route('transaksi.confirm', $trx->id_transaksi) }}" method="POST" class="inline-block ml-2">

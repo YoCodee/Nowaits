@@ -93,18 +93,18 @@
                         </div>
                         <div class="bg-white text-slate-700 px-8 py-6 rounded-[24px] rounded-bl-[4px] max-w-2xl shadow-sm border border-gray-100 relative">
                             <p class="leading-relaxed">
-                                Pendaftaran 100% GRATIS. Kami hanya mengenakan biaya platform kecil sebesar 2% untuk setiap transaksi sukses yang terjadi antara Petani dan Mitra untuk pemeliharaan sistem.
+                                Pendaftaran 100% GRATIS. Kami hanya mengenakan biaya platform kecil sebesar 2.5% untuk setiap transaksi sukses yang terjadi antara Petani dan Mitra untuk pemeliharaan sistem.
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
 
-             {{-- Item 4 --}}
+            {{-- Item 4 --}}
             <div class="faq-item group">
                 <div class="flex items-start gap-4 justify-end cursor-pointer faq-trigger">
                     <div class="bg-[#022c22] text-white px-8 py-5 rounded-[24px] rounded-br-[4px] relative max-w-xl shadow-lg transition-transform duration-300 group-hover:-translate-y-1">
-                        <h3 class="font-semibold text-lg">Wilayah mana saja yang tercover?</h3>
+                        <h3 class="font-semibold text-lg">Apakah sistem pembayaran aman?</h3>
                     </div>
                     <button class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center shrink-0 hover:bg-[#bef264] transition-colors duration-300">
                         <svg class="w-6 h-6 text-[#022c22] transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -114,11 +114,11 @@
                 <div class="faq-answer h-0 overflow-hidden opacity-0">
                     <div class="flex items-end gap-4 mt-4">
                         <div class="w-10 h-10 rounded-full bg-gray-300 overflow-hidden shrink-0 border-2 border-white shadow-sm">
-                            <img src="https://i.pravatar.cc/150?u=map" alt="Map" class="w-full h-full object-cover">
+                            <img src="https://i.pravatar.cc/150?u=security" alt="Security" class="w-full h-full object-cover">
                         </div>
                         <div class="bg-white text-slate-700 px-8 py-6 rounded-[24px] rounded-bl-[4px] max-w-2xl shadow-sm border border-gray-100 relative">
                             <p class="leading-relaxed">
-                                Saat ini kami fokus di wilayah Jawa timur, khususnya Malang, Batu, dan Surabaya. Namun kami sedang berekspansi ke Jawa Tengah dan Bali dalam waktu dekat.
+                                Keamanan adalah prioritas kami. Semua transaksi menggunakan sistem Escrow (Rekening Bersama), di mana dana mitra ditahan hingga barang diterima dan dikonfirmasi sesuai pesanan. Petani terjamin dibayar, Mitra terjamin barangnya.
                             </p>
                         </div>
                     </div>

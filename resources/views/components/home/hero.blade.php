@@ -65,9 +65,9 @@
 
     {{-- Buttons inside Top Left Shape --}}
     <div class="hidden md:flex absolute top-5 left-0 z-20 items-center gap-4 pl-0">
-        <button class="bg-[#bef264] text-[#022c22] px-8 py-3.5 rounded-full font-bold text-sm tracking-wide hover:bg-[#a3e635] transition-transform active:scale-95 cursor-pointer shadow-lg whitespace-nowrap">
-            Start Free Trial
-        </button>
+        <a href="{{ route('dashboard') }}" class="bg-[#bef264] text-[#022c22] px-8 py-3.5 rounded-full font-bold text-sm tracking-wide hover:bg-[#a3e635] transition-transform active:scale-95 cursor-pointer shadow-lg whitespace-nowrap">
+            Lihat Dashboard
+        </a>
         <button class="w-12 h-12 border border-[#bef264] rounded-full flex items-center justify-center text-[#bef264] hover:bg-[#bef264] hover:text-[#022c22] transition-colors cursor-pointer bg-[#022c22]">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="7" y1="17" x2="17" y2="7"></line>

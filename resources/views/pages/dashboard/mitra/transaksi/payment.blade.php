@@ -35,7 +35,11 @@
                                 file:text-sm file:font-semibold
                                 file:bg-[#bef264] file:text-[#022c22]
                                 hover:file:bg-[#a3e635]
-                            " required>
+                            ">
+                            @error('bukti_bayar')
+                                <p class="text-red-500 text-xs mt-2 font-semibold">{{ $message }}</p>
+                            @enderror
+                            <p class="text-xs text-gray-400 mt-2">Maksimal 2MB. Format: JPG, PNG, JPEG.</p>
                         </div>
 
                         <button type="submit" class="w-full bg-[#022c22] text-[#bef264] py-3 rounded-xl font-bold hover:bg-[#033a2d] transition-colors shadow-lg">

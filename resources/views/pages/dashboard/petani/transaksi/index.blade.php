@@ -39,7 +39,9 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="font-bold text-gray-900">{{ $trx->pembeli->name }}</div>
-                                        <div class="text-xs text-gray-500">{{ $trx->pembeli->alamatPengguna->kota ?? 'Lokasi tidak ada' }}</div>
+                                        <div class="text-xs text-gray-500" title="{{ $trx->alamat_pengiriman_snapshot['alamat_lengkap'] ?? $trx->pembeli->alamatPengguna->alamat_lengkap ?? '' }}">
+                                            {{ Str::limit(($trx->alamat_pengiriman_snapshot['kota'] ?? $trx->pembeli->alamatPengguna->kota ?? '') . ' ' . ($trx->alamat_pengiriman_snapshot['alamat_lengkap'] ?? $trx->pembeli->alamatPengguna->alamat_lengkap ?? 'Lokasi tidak ada'), 30) }}
+                                        </div>
                                     </td>
                                     <td class="px-6 py-4 text-center">
                                         {{ $trx->jumlah_kg }} Kg

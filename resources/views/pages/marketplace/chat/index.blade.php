@@ -57,7 +57,7 @@
             @empty
                 <div class="p-10 text-center text-gray-500">
                     <p class="mb-2">Belum ada percakapan.</p>
-                    <a href="/" class="text-green-600 hover:underline">Cari produk di Market</a>
+                    <a href="{{ route('marketplace.index') }}" class="text-green-600 hover:underline">Cari produk di Market</a>
                 </div>
             @endforelse
         </div>

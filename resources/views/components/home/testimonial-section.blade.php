@@ -133,9 +133,9 @@
                  <p class="text-white/60 text-sm md:text-base">Jadilah bagian dari revolusi pertanian Indonesia.</p>
             </div>
 
-            <button class="relative z-10 bg-white text-[#022c22] px-8 py-4 rounded-full font-bold hover:bg-[#bef264] transition-colors duration-300 shadow-lg">
+            <a href="{{ route('dashboard') }}" class="relative z-10 bg-white text-[#022c22] px-8 py-4 rounded-full font-bold hover:bg-[#bef264] transition-colors duration-300 shadow-lg">
                 Gabung Sekarang
-            </button>
+            </a>
 
             {{-- Decor --}}
             <div class="absolute top-0 right-0 w-64 h-64 bg-[#bef264] rounded-full mix-blend-overlay filter blur-[60px] opacity-10 group-hover:opacity-20 transition-opacity"></div>

@@ -1,4 +1,4 @@
-<div id="features-container" class="w-full relative z-30 bg-white text-black overflow-hidden features-wrapper">
+<div id="features" class="w-full relative z-30 bg-white text-black overflow-hidden features-wrapper">
     {{-- Inline Style Block --}}
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
@@ -97,9 +97,27 @@
                 margin: 0 auto;
                 border-radius: 20px !important;
                 transform: none !important;
+                aspect-ratio: auto;
+                overflow: hidden;
+                box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
             }
             #card-1, #card-3 {
                 border-radius: 20px !important;
+            }
+            
+            /* Reset 3D stacking for mobile */
+            .card-face {
+                display: none; /* Hide image face */
+            }
+            
+            .card-back {
+                display: flex !important; /* Force flex for content face */
+                position: relative;
+                width: 100%;
+                height: 350px; /* Nice fixed height for card */
+                transform: none;
+                border-radius: 20px;
+                backface-visibility: visible;
             }
         }
     </style>
@@ -201,31 +219,10 @@
             const Lenis = window.Lenis;
 
             if (gsap && ScrollTrigger && Lenis) {
-                // Determine if Lenis is already running globally or if we need local.
-                // Since this is a component, creating a new Lenis might conflict if one exists.
-                // But per user request codebase context, we will instantiate it.
-                const lenis = new Lenis({
-                  duration: 1.2,
-                  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                });
-
-                const raf = (time) => {
-                  lenis.raf(time);
-                  requestAnimationFrame(raf);
-                };
-                requestAnimationFrame(raf);
-
-                const updateScrollTrigger = (time) => {
-                  lenis.raf(time * 1000);
-                };
-
-                gsap.ticker.add(updateScrollTrigger);
-
-                // Disable GSAP lag smoothing to prevent stutter
-                gsap.ticker.lagSmoothing(0);
+                const lenis = window.lenis; // Assume global lenis instance availability
 
                 // --- ANIMATION CONTEXT ---
-                const containerRef = document.querySelector("#features-container"); // Acts as containerRef
+                const containerRef = document.querySelector("#features"); // Acts as containerRef
                 const stickySection = document.querySelector("#sticky-section"); // stickyRef
                 const stickyHeader = document.querySelector("#sticky-header h1"); // headerRef
                 const cardContainer = document.querySelector("#card-container"); // cardContainerRef

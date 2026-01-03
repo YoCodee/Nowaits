@@ -40,10 +40,15 @@
 
             {{-- DATA DEFINITION --}}
             @php
+                // Pre-processing
+                $valWaste = $wasteSavedKg ?? 0;
+                $valIncome = isset($pendapatanPetani) ? floor($pendapatanPetani / 1000000) : 0; 
+                $valMitra = $mitraAktif ?? 0;
+
                 $statsData = [
                     [
                         'id' => 1,
-                        'value' => 15420,
+                        'value' => $valWaste,
                         'suffix' => 'Kg',
                         'prefix' => '',
                         'label' => 'Buah Terselamatkan',
@@ -52,7 +57,7 @@
                     ],
                     [
                         'id' => 2,
-                        'value' => 850,
+                        'value' => $valIncome,
                         'suffix' => 'Juta',
                         'prefix' => 'Rp',
                         'label' => 'Pendapatan Petani',
@@ -61,7 +66,7 @@
                     ],
                     [
                         'id' => 3,
-                        'value' => 324,
+                        'value' => $valMitra,
                         'suffix' => '+',
                         'prefix' => '',
                         'label' => 'Mitra Bergabung',

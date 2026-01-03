@@ -47,7 +47,9 @@ class PermintaanMitraController extends Controller
             'nama_buah_dicari' => 'required|string|max:255',
             'jumlah_dicari_kg' => 'required|integer|min:1',
             'harga_ajuan_per_kg' => 'required|numeric|min:0',
-            'min_skor_kualitas' => 'required|numeric|min:0|max:1',
+            'min_skor_kulit' => 'required|numeric|min:0|max:1',
+            'min_skor_bentuk' => 'required|numeric|min:0|max:1',
+            'min_skor_tekstur' => 'required|numeric|min:0|max:1',
             'deskripsi_tambahan' => 'nullable|string',
         ]);
 
@@ -56,7 +58,9 @@ class PermintaanMitraController extends Controller
             'nama_buah_dicari' => $request->nama_buah_dicari,
             'jumlah_dicari_kg' => $request->jumlah_dicari_kg,
             'harga_ajuan_per_kg' => $request->harga_ajuan_per_kg,
-            'min_skor_kualitas' => $request->min_skor_kualitas,
+            'min_skor_kulit' => $request->min_skor_kulit,
+            'min_skor_bentuk' => $request->min_skor_bentuk,
+            'min_skor_tekstur' => $request->min_skor_tekstur,
             'deskripsi_tambahan' => $request->deskripsi_tambahan,
             'status_tawaran' => 'aktif',
         ]);
@@ -83,7 +87,9 @@ class PermintaanMitraController extends Controller
             'nama_buah_dicari' => 'required|string|max:255',
             'jumlah_dicari_kg' => 'required|integer|min:1',
             'harga_ajuan_per_kg' => 'required|numeric|min:0',
-            'min_skor_kualitas' => 'required|numeric|min:0|max:1',
+            'min_skor_kulit' => 'required|numeric|min:0|max:1',
+            'min_skor_bentuk' => 'required|numeric|min:0|max:1',
+            'min_skor_tekstur' => 'required|numeric|min:0|max:1',
             'deskripsi_tambahan' => 'nullable|string',
             'status_tawaran' => 'required|in:aktif,terpenuhi,dibatalkan',
         ]);
@@ -92,7 +98,9 @@ class PermintaanMitraController extends Controller
             'nama_buah_dicari' => $request->nama_buah_dicari,
             'jumlah_dicari_kg' => $request->jumlah_dicari_kg,
             'harga_ajuan_per_kg' => $request->harga_ajuan_per_kg,
-            'min_skor_kualitas' => $request->min_skor_kualitas,
+            'min_skor_kulit' => $request->min_skor_kulit,
+            'min_skor_bentuk' => $request->min_skor_bentuk,
+            'min_skor_tekstur' => $request->min_skor_tekstur,
             'deskripsi_tambahan' => $request->deskripsi_tambahan,
             'status_tawaran' => $request->status_tawaran,
         ]);

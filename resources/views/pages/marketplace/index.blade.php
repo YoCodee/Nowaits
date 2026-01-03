@@ -4,7 +4,10 @@
         priceMin: {{ $minPrice }},
         priceMax: {{ $maxPrice }},
         currentMin: {{ $minPrice }},
-        currentMax: {{ $maxPrice }},
+        currentMax: {{ request('max_price', $maxPrice) }},
+        minKulit: {{ request('min_kulit', 0) }},
+        minBentuk: {{ request('min_bentuk', 0) }},
+        minTekstur: {{ request('min_tekstur', 0) }},
         search: ''
     }" class="min-h-screen bg-[#f3f4f6] p-4 md:p-8">
 
@@ -24,6 +27,12 @@
 
             <!-- Search -->
             <form action="{{ route('marketplace.index') }}" method="GET" class="bg-white rounded-full flex items-center px-4 py-3 w-full max-w-xl shadow-sm border border-transparent focus-within:border-gray-200">
+                <!-- Preserve existing filters -->
+                @if(request('min_kulit')) <input type="hidden" name="min_kulit" value="{{ request('min_kulit') }}"> @endif
+                @if(request('min_bentuk')) <input type="hidden" name="min_bentuk" value="{{ request('min_bentuk') }}"> @endif
+                @if(request('min_tekstur')) <input type="hidden" name="min_tekstur" value="{{ request('min_tekstur') }}"> @endif
+                @if(request('max_price')) <input type="hidden" name="max_price" value="{{ request('max_price') }}"> @endif
+
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari buah..." class="ml-3 bg-transparent outline-none w-full text-sm text-gray-700 placeholder-gray-400">
             </form>
@@ -44,6 +53,7 @@
 
         <div class="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
                 <!-- Sidebar Filters -->
+                <!-- Sidebar Filters -->
             <aside class="w-full lg:w-64 flex-shrink-0 space-y-8 hidden lg:block">
                 <form action="{{ route('marketplace.index') }}" method="GET">
                     @if(request('search'))
@@ -57,8 +67,8 @@
                         </div>
 
                         <div class="mb-4 space-y-4">
-                            <input type="range" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#022c22]"
-                                min="{{ $minPrice }}" max="{{ $maxPrice }}" x-model="currentMax">
+                            <input type="range" name="max_price" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#022c22]"
+                                min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ request('max_price', $maxPrice) }}" x-model="currentMax">
 
                             <div class="flex justify-between text-xs font-bold text-[#022c22]">
                                 <span class="bg-[#022c22] text-white px-2 py-1 rounded-lg">Rp <span x-text="currentMin.toLocaleString()"></span></span>
@@ -71,34 +81,34 @@
                     <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 mb-6 space-y-6">
                          <div class="flex justify-between items-center mb-2">
                             <h3 class="font-bold text-gray-800">Kriteria Kualitas</h3>
-                            <button type="submit" class="text-xs bg-[#bef264] px-2 py-1 rounded font-bold text-[#022c22]">Terapkan</button>
+                            <button type="submit" class="text-xs bg-[#bef264] px-2 py-1 rounded font-bold text-[#022c22] hover:bg-[#a3e635] transition-colors">Terapkan</button>
                         </div>
 
                         <!-- Kulit -->
                         <div>
                              <div class="flex justify-between text-xs mb-1">
                                 <label class="font-bold text-gray-500">Min. Skor Kulit</label>
-                                <span class="font-bold text-[#022c22]">{{ request('min_kulit', 0) }}</span>
+                                <span class="font-bold text-[#022c22]" x-text="minKulit"></span>
                             </div>
-                            <input type="range" name="min_kulit" min="0" max="1" step="0.1" value="{{ request('min_kulit', 0) }}" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#022c22]">
+                            <input type="range" name="min_kulit" min="0" max="1" step="0.1" x-model="minKulit" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#022c22]">
                         </div>
 
                          <!-- Bentuk -->
                          <div>
                              <div class="flex justify-between text-xs mb-1">
                                 <label class="font-bold text-gray-500">Min. Skor Bentuk</label>
-                                <span class="font-bold text-[#022c22]">{{ request('min_bentuk', 0) }}</span>
+                                <span class="font-bold text-[#022c22]" x-text="minBentuk"></span>
                             </div>
-                            <input type="range" name="min_bentuk" min="0" max="1" step="0.1" value="{{ request('min_bentuk', 0) }}" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#022c22]">
+                            <input type="range" name="min_bentuk" min="0" max="1" step="0.1" x-model="minBentuk" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#022c22]">
                         </div>
 
                          <!-- Tekstur -->
                          <div>
                              <div class="flex justify-between text-xs mb-1">
                                 <label class="font-bold text-gray-500">Min. Skor Tekstur</label>
-                                <span class="font-bold text-[#022c22]">{{ request('min_tekstur', 0) }}</span>
+                                <span class="font-bold text-[#022c22]" x-text="minTekstur"></span>
                             </div>
-                            <input type="range" name="min_tekstur" min="0" max="1" step="0.1" value="{{ request('min_tekstur', 0) }}" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#022c22]">
+                            <input type="range" name="min_tekstur" min="0" max="1" step="0.1" x-model="minTekstur" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#022c22]">
                         </div>
                     </div>
                 </form>

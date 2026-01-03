@@ -206,7 +206,6 @@
 
                 {{-- Step 2 --}}
                 <div class="bg-[#022c22] border border-[#bef264]/30 rounded-3xl p-8 relative z-10 text-center shadow-[0_0_50px_rgba(190,242,100,0.1)] transform scale-105">
-                     <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#bef264] text-[#022c22] px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Logic Kami</div>
                     <div class="w-16 h-16 bg-[#bef264] rounded-full flex items-center justify-center text-3xl font-bold text-[#022c22] mx-auto mb-6">2</div>
                     <h4 class="text-xl font-bold mb-3 text-[#bef264]">Hitung Potongan</h4>
                     <p class="text-sm text-gray-400">Sistem menghitung nilai kekurangan berdasarkan total skor kualitas.</p>
@@ -236,7 +235,7 @@
 
             <div class="mt-16 text-center">
                 <a href="{{ route('kalkulasi.kriteria') }}" class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-[#022c22] bg-[#bef264] rounded-full hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(190,242,100,0.4)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transform hover:scale-105">
-                    Pelajari Simulasi Lengkap
+                     Informasi Kriteria Lengkap
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                 </a>
             </div>

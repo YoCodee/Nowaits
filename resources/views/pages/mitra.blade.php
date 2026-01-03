@@ -225,8 +225,8 @@
             Solusi cerdas menekan biaya produksi dan menyelamatkan lingkungan.
         </p>
 
-        <a href="{{ url('/register') }}" class="btn-mitra-register mb-5">
-            Registrasi Mitra
+        <a href="{{ Auth::check() ? route('dashboard') : url('/register') }}" class="btn-mitra-register mb-5">
+            {{ Auth::check() ? 'Ke Dashboard' : 'Registrasi Mitra' }}
         </a>
 
         <div class="mt-2">
@@ -319,8 +319,8 @@
             <p class="mitra-subtitle" style="font-weight: bold; margin-bottom: 20px;">
                 Siap mengoptimalkan biaya produksi Anda?
             </p>
-            <a href="{{ url('/register') }}" class="btn-mitra-register">
-                Daftar Sekarang
+            <a href="{{ Auth::check() ? route('dashboard') : url('/register') }}" class="btn-mitra-register">
+                {{ Auth::check() ? 'Ke Dashboard' : 'Daftar Sekarang' }}
             </a>
         </div>
     </div>

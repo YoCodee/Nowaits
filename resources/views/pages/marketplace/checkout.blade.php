@@ -97,12 +97,16 @@
                                     <span>Biaya Ongkir ({{ number_format($jarak, 0) }} km)</span>
                                     <span class="font-bold text-gray-900">Rp <span x-text="ongkir.toLocaleString('id-ID')"></span></span>
                                 </div>
+                                <div class="flex justify-between text-sm text-gray-600">
+                                    <span>Biaya Layanan (2.5%)</span>
+                                    <span class="font-bold text-gray-900">Rp <span x-text="Math.ceil((price * qty) * 0.025).toLocaleString('id-ID')"></span></span>
+                                </div>
                             </div>
 
                             <div class="border-t border-gray-100 pt-4 mb-6">
                                 <div class="flex justify-between items-center">
                                     <span class="font-bold text-gray-800">Total Tagihan</span>
-                                    <span class="font-bold text-xl text-[#022c22]">Rp <span x-text="(price * qty + ongkir).toLocaleString('id-ID')"></span></span>
+                                    <span class="font-bold text-xl text-[#022c22]">Rp <span x-text="(price * qty + ongkir + Math.ceil((price * qty) * 0.025)).toLocaleString('id-ID')"></span></span>
                                 </div>
                             </div>
 

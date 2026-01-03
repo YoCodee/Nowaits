@@ -19,7 +19,7 @@
                 <p class="text-sm text-gray-500 mb-2">{{ Str::limit($permintaan->deskripsi_tambahan, 100) }}</p>
                 <div class="flex items-center gap-2 text-xs font-bold text-gray-400">
                     <span class="bg-white border border-gray-200 px-2 py-1 rounded">Budget: Rp {{ number_format($permintaan->harga_ajuan_per_kg, 0, ',', '.') }}</span>
-                    <span class="bg-white border border-gray-200 px-2 py-1 rounded">Min Skor: {{ $permintaan->min_skor_kualitas }}</span>
+                    <span class="bg-white border border-gray-200 px-2 py-1 rounded">Min Skor: {{ number_format(($permintaan->min_skor_kulit + $permintaan->min_skor_bentuk + $permintaan->min_skor_tekstur) / 3, 2) }}</span>
                 </div>
             </div>
 
@@ -27,34 +27,61 @@
             <form action="{{ route('penawaran.store', $permintaan->id_permintaan) }}" method="POST" class="p-6 space-y-4">
                 @csrf
 
-                <div x-data="{ grade: '' }">
+                <div x-data="{ 
+                    grade: '', 
+                    priceDisplay: '', 
+                    priceRaw: '',
+                    update(e) {
+                        const opt = e.target.options[e.target.selectedIndex];
+                        this.grade = opt.getAttribute('data-grade');
+                        const raw = opt.getAttribute('data-price');
+                        this.priceRaw = raw;
+                        this.priceDisplay = raw ? new Intl.NumberFormat('id-ID').format(raw) : '';
+                    }
+                }">
                     <label class="block text-sm font-bold text-gray-700 mb-2">Pilih Stok Buah Anda</label>
                     <select name="id_buah" required
-                        @change="grade = $event.target.selectedOptions[0].dataset.grade"
+                        @change="update($event)"
                         class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#022c22]">
-                        <option value="" data-grade="">-- Pilih Produk --</option>
+                        <option value="" data-grade="" data-price="">-- Pilih Produk --</option>
                         @foreach($buahs as $buah)
-                            <option value="{{ $buah->id_buah }}" data-grade="{{ $buah->penilaian->total_skor_akhir }}">
-                                {{ $buah->nama_buah }} (Stok: {{ $buah->stok }}kg)
+                            <option value="{{ $buah->id_buah }}" 
+                                data-grade="{{ number_format($buah->penilaian->total_skor_akhir, 2) }}"
+                                data-price="{{ $buah->harga_akhir ?? $buah->harga_awal ?? 0 }}"
+                                {{ $buah->stok < $permintaan->jumlah_dicari_kg ? 'disabled' : '' }}
+                                class="{{ $buah->stok < $permintaan->jumlah_dicari_kg ? 'text-gray-400 bg-gray-100' : '' }}">
+                                {{ $buah->nama_buah }} (Stok: {{ $buah->stok }}kg) 
+                                {{ $buah->stok < $permintaan->jumlah_dicari_kg ? '- Stok Kurang' : '' }}
                             </option>
                         @endforeach
                     </select>
 
-                    <!-- Dynamic Grade Field -->
-                    <div class="mt-4">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Grade / Total Akhir</label>
-                        <input type="text" x-model="grade" readonly placeholder="Otomatis terisi dari stok" class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-500 cursor-not-allowed">
-                        <p class="text-xs text-gray-400 mt-1">Nilai kualitas berdasarkan penilaian sistem.</p>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <!-- Dynamic Grade Field -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Total Kualitas</label>
+                            <input type="text" x-model="grade" readonly placeholder="-" class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-500 cursor-not-allowed">
+                        </div>
+                        
+                         <!-- Dynamic Price Field removed as it is now the main input -->
                     </div>
-                </div>
 
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Harga Tawaran per Kg</label>
-                    <div class="relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">Rp</span>
-                        <input type="number" name="harga_tawaran" required placeholder="0" class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#022c22]">
+                    <div class="mt-4">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Harga Tawaran per Kg (Sesuai Kualitas)</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">Rp</span>
+                            
+                            <!-- Visible Formatted Input -->
+                            <input type="text" readonly
+                                x-model="priceDisplay" 
+                                class="w-full bg-gray-100 border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none text-gray-600 cursor-not-allowed font-bold"
+                                placeholder="0">
+                                
+                            <!-- Hidden Actual Input for Submission -->
+                            <input type="hidden" name="harga_tawaran" x-model="priceRaw">
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Harga dikunci berdasarkan perhitungan kualitas sistem.</p>
                     </div>
-                    <p class="text-xs text-gray-400 mt-1">Saran: Dekati budget mitra (Rp {{ number_format($permintaan->harga_ajuan_per_kg, 0, ',', '.') }})</p>
                 </div>
 
                 <div>
