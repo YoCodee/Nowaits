@@ -3,14 +3,14 @@
 @section('title', 'Mitra - NoWaits')
 
 @section('content')
-
+    @include('components.home.navbar')
 <style>
     /* =========================================
        1. COLOR PALETTE & VARIABLES
        ========================================= */
     :root {
-        --palet-dark: #082f25; 
-        --palet-olive: #9cab4a; 
+        --palet-dark: #082f25;
+        --palet-olive: #9cab4a;
         --palet-light: #f4f4f4;
     }
 
@@ -25,7 +25,7 @@
     /* =========================================
        2. UI COMPONENTS (TYPOGRAPHY & BUTTONS)
        ========================================= */
-    
+
     .text-center { text-align: center; }
     .mb-4 { margin-bottom: 1.5rem; }
     .mb-5 { margin-bottom: 3rem; }
@@ -40,7 +40,7 @@
         font-weight: 700;
         margin-bottom: 15px;
     }
-    
+
     /* Sub-judul */
     .mitra-subtitle {
         color: #666;
@@ -87,12 +87,12 @@
     /* =========================================
        3. GRID SYSTEM (PERBAIKAN UTAMA DI SINI)
        ========================================= */
-    
+
     /* Grid untuk Fitur (2 Kolom x 2 Baris) */
     .mitra-grid-2col {
         display: grid;
         /* PAKSA JADI 2 KOLOM SAMA BESAR (1fr 1fr) */
-        grid-template-columns: 1fr 1fr; 
+        grid-template-columns: 1fr 1fr;
         gap: 30px;
         margin-bottom: 50px;
     }
@@ -100,7 +100,7 @@
     /* Grid untuk Info Bawah (3 Kolom) */
     .mitra-grid-3col {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 30px;
         margin-bottom: 50px;
     }
@@ -183,7 +183,7 @@
         margin-bottom: 20px;
         display: block;
     }
-    
+
     /* Checklist Style */
     .check-list {
         list-style: none;
@@ -221,24 +221,24 @@
     <div class="text-center mb-5">
         <h1 class="mitra-title">Mengapa Bermitra dengan Kami?</h1>
         <p class="mitra-subtitle mb-4">
-            Akses langsung ke jaringan petani untuk mendapatkan buah <em>off-grade</em> berkualitas. 
+            Akses langsung ke jaringan petani untuk mendapatkan buah <em>off-grade</em> berkualitas.
             Solusi cerdas menekan biaya produksi dan menyelamatkan lingkungan.
         </p>
-        
+
         <a href="{{ url('/register') }}" class="btn-mitra-register mb-5">
             Registrasi Mitra
         </a>
 
         <div class="mt-2">
-            <img src="{{ asset('images/buah_reject.jpg') }}" 
-                 class="hero-img-rounded" 
+            <img src="{{ asset('images/buah_reject.jpg') }}"
+                 class="hero-img-rounded"
                  alt="Buah reject">
         </div>
     </div>
 
     {{-- BAGIAN 2: GRID FITUR UTAMA (2 KOLOM) --}}
     <div class="mitra-grid-2col">
-        
+
         <div class="feature-box">
             <div class="icon-circle">🔍</div>
             <h3 class="feature-title">Pencarian Spesifik</h3>
@@ -274,7 +274,7 @@
         </p>
 
         <div class="mitra-grid-3col">
-            
+
             <div class="info-card">
                 <span class="info-icon">💰</span>
                 <h3 class="feature-title">Efisiensi Biaya Produksi</h3>

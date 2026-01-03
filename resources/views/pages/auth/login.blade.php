@@ -28,7 +28,7 @@
     .login-image-side {
         flex: 1.1;
         position: relative;
-        background-image: url('https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'); 
+        background-image: url('https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
         background-size: cover;
         background-position: center;
         display: flex;
@@ -67,15 +67,15 @@
     .login-form-side {
         flex: 0.9;
         display: flex;
-        flex-direction: column; 
+        flex-direction: column;
         padding: 40px 60px;
         position: relative;
     }
 
     .top-bar {
         display: flex;
-        justify-content: flex-end; 
-        margin-bottom: 20px; 
+        justify-content: flex-end;
+        margin-bottom: 20px;
     }
 
     .top-login-btn {
@@ -90,12 +90,12 @@
     }
 
     .form-wrapper {
-        margin: auto 0; 
+        margin: auto 0;
     }
 
     .login-heading h2 {
         color: #2c3e50;
-        font-size: 2.5rem; 
+        font-size: 2.5rem;
         font-weight: 800;
         margin-bottom: 10px;
         line-height: 1.2;
@@ -126,7 +126,7 @@
         border-radius: 50px;
         font-size: 1rem;
         outline: none;
-        box-sizing: border-box; 
+        box-sizing: border-box;
         transition: border-color 0.3s;
     }
 
@@ -157,7 +157,7 @@
         margin-top: 25px;
         color: #7f8c8d;
     }
-    
+
     .register-link a {
         color: #3483c9;
         text-decoration: none;
@@ -176,18 +176,21 @@
 <div class="login-container">
     <div class="login-image-side">
         <div class="login-image-text">
-            <h1>Manage</h1>
+            <h1>NOWAITS</h1>
             <p>A digital platform reducing fruit waste by connecting farmers to partners with smart pricing, logistics tracking, and sustainable redistribution systems.</p>
         </div>
     </div>
 
     <div class="login-form-side">
-        
+
         <div class="top-bar">
             <a href="{{ route('login') }}" class="top-login-btn">Login</a>
         </div>
 
         <div class="form-wrapper">
+            @if(session('status'))
+                <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ session('status') }}</div>
+            @endif
             <div class="login-heading">
                 <h2>Welcome Back to NoWaits</h2>
                 <p>Sign to your account</p>

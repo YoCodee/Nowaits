@@ -3,7 +3,7 @@
 @section('title', 'Mitra Petani - NoWaits')
 
 @section('content')
-
+    @include('components.home.navbar')
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
@@ -30,10 +30,10 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            
+
             <div>
                 <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
-                    Solusi untuk Segala <span class="text-green-600">Hasil Panen</span>  Petani 
+                    Solusi untuk Segala <span class="text-green-600">Hasil Panen</span>  Petani
                 </h1>
                 <p class="text-gray-600 text-lg mb-8 leading-relaxed">
                     Menjembatani petani dengan mitra untuk mengurangi limbah pangan dan kerugian petani.                </p>
@@ -41,30 +41,30 @@
 
             <div class="relative flex justify-center lg:justify-end items-center">
                 <div class="relative w-[400px] h-[400px] hidden lg:block">
-                    
+
                     <div class="absolute top-0 right-10 w-48 h-52 hexagon-wrapper filter drop-shadow-lg">
                         <img src="{{ asset('images/good_fruits.jpg') }}" class="hexagon bg-gray-200" alt="Buah Sempurna Grade A">
                         <div class="absolute bottom-5 left-0 right-0 text-center">
-                 
+
                         </div>
                     </div>
-                    
+
                     <div class="absolute top-32 right-32 w-56 h-64 z-10 hexagon-wrapper filter drop-shadow-lg">
                         <img src="{{ asset('images/imperfect_fruits.png') }}" class="hexagon bg-gray-200" alt="Buah Kurang Sempurna Grade B">
                         <div class="absolute bottom-8 left-0 right-0 text-center">
-              
+
                         </div>
                     </div>
-                    
+
                     <div class="absolute bottom-0 right-0 w-48 h-52 hexagon-wrapper filter drop-shadow-lg">
                          <img src="{{ asset('images/rotten_fruits.jpg') }}" class="hexagon bg-gray-200" alt="Limbah Organik Grade C">
                          <div class="absolute bottom-5 left-0 right-0 text-center">
-               
+
                         </div>
                     </div>
 
                 </div>
-                
+
                 <img src="{{ asset('images/good_fruits.jpg') }}" alt="Petani" class="block lg:hidden rounded-2xl shadow-xl w-full">
             </div>
         </div>
@@ -73,7 +73,7 @@
 
 <div class="py-16 bg-white" id="profit-check">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         <div class="text-center mb-12">
             <h2 class="text-3xl font-bold text-gray-900">Dapatkan Profit dan Kurangi Food Waste</h2>
             <p class="text-gray-600 mt-4 max-w-2xl mx-auto text-lg">
@@ -83,7 +83,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
+
             <div class="p-8 rounded-2xl border border-red-100 bg-red-50/50 grayscale opacity-80 hover:opacity-100 transition">
                 <div class="flex items-center mb-6">
                     <div class="w-10 h-10 rounded-full bg-red-200 flex items-center justify-center text-red-700 font-bold mr-4">X</div>
@@ -163,7 +163,7 @@
 <div class="py-16 bg-white text-center">
     <div class="max-w-3xl mx-auto px-4">
         <h2 class="text-3xl font-bold text-gray-900 mb-6">Cukup 3 Langkah Sederhana</h2>
-        
+
         <div class="flex justify-center gap-8 mb-10 text-left flex-col md:flex-row">
             <div class="flex items-center">
                 <span class="text-4xl font-bold text-gray-200 mr-3">1</span>
