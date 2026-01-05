@@ -114,6 +114,41 @@
                 }
             }
         });
+            // 5. Scroll to Top Logic
+            const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+            const faqSection = document.getElementById('faq-section');
+
+            if (scrollToTopBtn) {
+                lenis.on('scroll', ({ scroll }) => {
+                    let shouldShow = false;
+
+                    if (faqSection) {
+                         // Show when FAQ section starts entering the viewport (bottom of screen)
+                         // trigger point: Section Top - Window Height
+                        const triggerPoint = faqSection.offsetTop - window.innerHeight + 200; 
+                        if (scroll > triggerPoint) {
+                            shouldShow = true;
+                        }
+                    } else {
+                        // Fallback for pages without FAQ section (though button only on Home now)
+                        if (scroll > 500) shouldShow = true; 
+                    }
+
+                    if (shouldShow) {
+                        scrollToTopBtn.classList.remove('translate-y-20', 'opacity-0');
+                    } else {
+                        scrollToTopBtn.classList.add('translate-y-20', 'opacity-0');
+                    }
+                });
+
+                // Scroll to top on click
+                scrollToTopBtn.addEventListener('click', () => {
+                    lenis.scrollTo(0);
+                });
+            }
+        });
     </script>
+    
+    
 </body>
 </html>

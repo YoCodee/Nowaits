@@ -96,6 +96,16 @@
                                     Terima Tawaran
                                 </button>
                             </form>
+                            
+                            <!-- Chat Button -->
+                            <form action="{{ route('chat.offer', $offer->id_penawaran) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="w-full bg-blue-50 text-blue-700 py-2 rounded-xl font-bold text-sm hover:bg-blue-100 transition-colors flex items-center justify-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                                    Chat Petani
+                                </button>
+                            </form>
+
                             <form action="{{ route('penawaran.reject', $offer->id_penawaran) }}" method="POST">
                                 @csrf
                                 <button type="submit" onclick="return confirm('Yakin ingin menolak tawaran ini?');" class="w-full border border-red-200 text-red-600 py-2 rounded-xl font-bold text-sm hover:bg-red-50 transition-colors">

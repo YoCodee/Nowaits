@@ -109,15 +109,14 @@ class TransaksiController extends Controller
         // Logic for Seller (Petani)
         if ($user->id_pengguna === $transaksi->id_penjual) {
             if ($action === 'accept') {
+                // Stok sudah dikurangi saat pesanan dibuat, jadi hanya update status
                 $transaksi->update(['status' => 'diproses']);
                 
-                // Deduct stock real-time
-                $buah = $transaksi->postingan->buah;
-                $buah->stok = $buah->stok - $transaksi->jumlah_kg;
-                $buah->save();
-
             } elseif ($action === 'reject') {
                 $transaksi->update(['status' => 'dibatalkan']);
+
+                // Kembalikan stok ke petani karena dibatalkan
+                $transaksi->postingan->buah->increment('stok', $transaksi->jumlah_kg);
             }
         } 
         // Logic for Buyer (Mitra)
@@ -311,6 +310,9 @@ class TransaksiController extends Controller
             'total_bayar' => $totalBayar,
             'status' => 'menunggu_pembayaran',
         ]);
+
+        // Kurangi Stok Langsung saat Pesanan Dibuat
+        $postingan->buah->decrement('stok', $request->jumlah_kg);
 
         return redirect()->route('dashboard')->with('success', 'Pesanan berhasil dibuat! Silakan lakukan pembayaran.');
     }

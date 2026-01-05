@@ -9,6 +9,8 @@ use App\Models\Postingan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Models\Transaksi;
+use Illuminate\Support\Facades\DB;
 
 class PenawaranController extends Controller
 {
@@ -23,8 +25,12 @@ class PenawaranController extends Controller
         if (Auth::user()->peran !== 'petani') abort(403);
         
         // Fetch User's Products (Buah)
+        // Fetch User's Products (Buah) - Filter Matches (Case Insensitive)
+        $searchKey = Str::lower($permintaan->nama_buah_dicari);
+
         $buahs = Buah::where('id_pengguna', Auth::user()->id_pengguna)
             ->where('stok', '>', 0)
+            ->whereRaw('LOWER(nama_buah) LIKE ?', ['%' . $searchKey . '%']) // Filter logic
             ->get();
 
         return view('pages.marketplace.offer', compact('permintaan', 'buahs'));
@@ -59,24 +65,122 @@ class PenawaranController extends Controller
      */
     public function accept($id)
     {
-        $penawaran = Penawaran::with('permintaan')->findOrFail($id);
+        $penawaran = Penawaran::with(['permintaan', 'buah', 'petani.alamatPengguna'])->findOrFail($id);
+        $mitra = Auth::user();
 
-        if ($penawaran->permintaan->id_pengguna !== Auth::user()->id_pengguna) {
+        // 1. Validasi: Pastikan penawaran untuk user yang login
+        if ($penawaran->permintaan->id_pengguna !== $mitra->id_pengguna) {
              abort(403);
         }
 
-        // Update status offer
-        $penawaran->update(['status' => 'accepted']);
+        // 2. Validasi: Alamat Mitra Wajib Ada (untuk hitung ongkir)
+        if (!$mitra->alamatPengguna) {
+             return redirect()->route('profile.edit')->with('error', 'Silakan lengkapi alamat Anda untuk pengiriman sebelum menerima penawaran.');
+        }
 
-        // Update request status to 'terpenuhi'
-        $penawaran->permintaan->update(['status_tawaran' => 'terpenuhi']);
+        DB::beginTransaction();
+        try {
+            // A. Update Status Penawaran & Permintaan
+            $penawaran->update(['status' => 'accepted']);
+            $penawaran->permintaan->update(['status_tawaran' => 'terpenuhi']);
 
-        // Reject other offers for the same request
-        Penawaran::where('id_permintaan', $penawaran->id_permintaan)
-            ->where('id_penawaran', '!=', $id)
-            ->update(['status' => 'rejected']);
+            // Reject penawaran lain untuk permintaan ini
+            Penawaran::where('id_permintaan', $penawaran->id_permintaan)
+                ->where('id_penawaran', '!=', $id)
+                ->update(['status' => 'rejected']);
 
-        return redirect()->back()->with('success', 'Penawaran diterima. Silakan hubungi petani atau buat transaksi.');
+            // B. Siapkan Postingan (Transaksi butuh ID Postingan)
+            // Cek apakah buah ini sudah punya postingan? Jika belum, buat hidden postingan.
+            $postingan = Postingan::where('id_buah', $penawaran->id_buah)->first();
+            if (!$postingan) {
+                $postingan = Postingan::create([
+                    'id_pengguna' => $penawaran->id_petani,
+                    'id_buah' => $penawaran->id_buah,
+                    'tipe_postingan' => 'jual', 
+                    'judul_posting' => 'Penawaran Khusus: ' . $penawaran->buah->nama_buah,
+                    'keterangan' => 'Postingan otomatis untuk transaksi penawaran.',
+                    'total_harga' => 0, 
+                    'status' => 'aktif',
+                ]);
+            }
+
+            // C. Hitung Ongkir & Jarak
+            $sellerAddress = $penawaran->petani->alamatPengguna;
+            $buyerAddress = $mitra->alamatPengguna;
+            
+            $jarak = 0;
+            $ongkir = 0;
+            
+            if ($sellerAddress && $sellerAddress->latitude && $sellerAddress->longitude &&
+                $buyerAddress->latitude && $buyerAddress->longitude) {
+                
+                $jarak = $this->calculateDistance(
+                    $sellerAddress->latitude, 
+                    $sellerAddress->longitude,
+                    $buyerAddress->latitude,
+                    $buyerAddress->longitude
+                );
+                // Rate: Rp 5.000 per KM
+                $ongkir = ceil($jarak * 5000); 
+            }
+
+            // D. Hitung Total Harga
+            // Asumsi: Deal quantity = permintaan quantity
+            $jumlahKg = $penawaran->permintaan->jumlah_dicari_kg;
+            
+            // Cek Stok Real-time (PENTING)
+            if ($penawaran->buah->stok < $jumlahKg) {
+                 throw new \Exception('Stok petani tidak mencukupi untuk jumlah ini (' . $jumlahKg . 'kg).');
+            }
+
+            $hargaPerKg = $penawaran->harga_tawaran;
+            $totalHargaBarang = $hargaPerKg * $jumlahKg;
+            $biayaAdmin = ceil($totalHargaBarang * 0.025); // 2.5%
+            $totalBayar = $totalHargaBarang + $ongkir + $biayaAdmin;
+
+            // E. Buat Transaksi
+            $transaksi = Transaksi::create([
+                'id_postingan' => $postingan->id_posting,
+                'id_pembeli' => $mitra->id_pengguna,
+                'id_penjual' => $penawaran->id_petani,
+                'jumlah_kg' => $jumlahKg,
+                'harga_per_kg' => $hargaPerKg,
+                'total_harga_barang' => $totalHargaBarang,
+                'biaya_ongkir' => $ongkir,
+                'jarak_km' => $jarak,
+                'alamat_pengiriman_snapshot' => $buyerAddress->toArray(),
+                'total_bayar' => $totalBayar,
+                'status' => 'menunggu_pembayaran',
+            ]);
+
+            // F. Kurangi Stok Langsung
+            $penawaran->buah->decrement('stok', $jumlahKg);
+
+            DB::commit();
+
+            // Redirect langsung ke halaman bayar / detail transaksi
+            return redirect()->route('transaksi.payment', $transaksi->id_transaksi)
+                ->with('success', 'Tawaran diterima! Pesanan otomatis dibuat. Silakan upload bukti pembayaran.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal memproses transaksi: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Hitung jarak (Haversine) - Helper
+     */
+    private function calculateDistance($lat1, $lon1, $lat2, $lon2)
+    {
+        $earthRadius = 6371; // km
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+            sin($dLon / 2) * sin($dLon / 2);
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        return $earthRadius * $c;
     }
 
     /**

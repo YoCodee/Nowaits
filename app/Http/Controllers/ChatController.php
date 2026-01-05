@@ -72,6 +72,50 @@ class ChatController extends Controller
     }
 
     /**
+     * Start chat from Offer (Penawaran).
+     */
+    public function startChatFromOffer($id)
+    {
+        $penawaran = \App\Models\Penawaran::with('buah')->findOrFail($id);
+        $myId = Auth::user()->id_pengguna;
+        $petaniId = $penawaran->id_petani;
+
+        // Ensure Postingan exists for context (create hidden if needed)
+        $posting = Postingan::where('id_buah', $penawaran->id_buah)->first();
+        if (!$posting) {
+            $posting = Postingan::create([
+                'id_pengguna' => $petaniId,
+                'id_buah' => $penawaran->id_buah,
+                'tipe_postingan' => 'jual', 
+                'judul_posting' => 'Penawaran Khusus: ' . ($penawaran->buah->nama_buah ?? 'Buah'),
+                'keterangan' => 'Postingan otomatis untuk chat penawaran.',
+                'total_harga' => 0, 
+                'status' => 'aktif', // Hidden conceptually but active in DB
+            ]);
+        }
+
+        // Find or Create Conversation
+        $conversation = Conversation::where('id_posting', $posting->id_posting)
+            ->where(function($q) use ($myId, $petaniId) {
+                $q->where(function($sub) use ($myId, $petaniId) {
+                    $sub->where('user_one_id', $myId)->where('user_two_id', $petaniId);
+                })->orWhere(function($sub) use ($myId, $petaniId) {
+                    $sub->where('user_one_id', $petaniId)->where('user_two_id', $myId);
+                });
+            })->first();
+
+        if (!$conversation) {
+            $conversation = Conversation::create([
+                'user_one_id' => $myId,
+                'user_two_id' => $petaniId,
+                'id_posting' => $posting->id_posting
+            ]);
+        }
+
+        return redirect()->route('chat.show', $conversation->id);
+    }
+
+    /**
      * Show Chat Room.
      * Menggunakan ID Conversation agar Pusher Channel-nya unik.
      */

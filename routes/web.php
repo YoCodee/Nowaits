@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
     // Chat Routes
     Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
     Route::post('/chat/start', [App\Http\Controllers\ChatController::class, 'startChat'])->name('chat.start');
+    Route::post('/chat/offer/{id}', [App\Http\Controllers\ChatController::class, 'startChatFromOffer'])->name('chat.offer');
     
     // Perhatikan parameternya sekarang {conversation_id}
     Route::get('/chat/{conversation_id}', [App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
