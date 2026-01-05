@@ -49,4 +49,9 @@
     @include('components.home.testimonial-section')
     @include('components.home.faq-section')
     </main>
+
+    <!-- Scroll to Top Button (Specific to Home) -->
+    <button id="scrollToTopBtn" class="fixed bottom-8 right-8 z-50 bg-[#bef264] text-[#022c22] p-3 rounded-full shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 hover:scale-110 hover:shadow-xl focus:outline-none" aria-label="Scroll to Top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+    </button>
     </div>

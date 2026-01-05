@@ -22,12 +22,12 @@
                     </div>
                 </div>
             </div>
-            <x-dashboard.stats-card title="Buah Terjual" value="{{ number_format($buahTerjual, 0, ',', '.') }} kg" subtext="Total terjual via Marketplace" trend="8">
+            <x-dashboard.stats-card title="Buah Terjual" value="{{ number_format($buahTerjual, 0, ',', '.') }} kg" subtext="Total terjual via Marketplace">
                 <x-slot name="icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                 </x-slot>
             </x-dashboard.stats-card>
-            <x-dashboard.stats-card title="Stok Tersedia" value="{{ number_format($stok, 0, ',', '.') }} kg" subtext="Siap dipasarkan" trend="-5">
+            <x-dashboard.stats-card title="Stok Tersedia" value="{{ number_format($stok, 0, ',', '.') }} kg" subtext="Siap dipasarkan">
                 <x-slot name="icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
                 </x-slot>
@@ -77,12 +77,12 @@
     @elseif($role === 'mitra')
         {{-- Existing Mitra Dashboard --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <x-dashboard.stats-card title="Total Pengeluaran" value="Rp {{ number_format($totalPembelianRp, 0, ',', '.') }}" subtext="Total belanja anda" trend="0">
+            <x-dashboard.stats-card title="Total Pengeluaran" value="Rp {{ number_format($totalPembelianRp, 0, ',', '.') }}" subtext="Total belanja anda">
                 <x-slot name="icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 </x-slot>
             </x-dashboard.stats-card>
-            <x-dashboard.stats-card title="Buah Dibeli" value="{{ number_format($totalBuahDibeli, 0, ',', '.') }} kg" subtext="Total bahan baku didapat" trend="15">
+            <x-dashboard.stats-card title="Buah Dibeli" value="{{ number_format($totalBuahDibeli, 0, ',', '.') }} kg" subtext="Total bahan baku didapat">
                 <x-slot name="icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                 </x-slot>

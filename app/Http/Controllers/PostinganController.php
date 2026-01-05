@@ -32,6 +32,11 @@ class PostinganController extends Controller
      */
     public function create()
     {
+        // Validate Address Existence before Posting (IMPORTANT for Shipping)
+        if (!Auth::user()->alamatPengguna) {
+             return redirect()->route('profile.edit')->with('error', 'Harap lengkapi alamat Anda (Kota & Titik Peta) sebelum membuat postingan agar ongkir bisa dihitung.');
+        }
+
         // Get fruit stocks that are NOT currently in an active posting
         // This prevents double posting the same stock item
         $activePostingBuahIds = Postingan::where('id_pengguna', Auth::user()->id_pengguna)
