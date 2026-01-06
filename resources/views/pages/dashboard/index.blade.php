@@ -72,6 +72,9 @@
                     </tbody>
                 </table>
             </div>
+            <div class="mt-4">
+                {{ $pesananTerbaru->links() }}
+            </div>
         </div>
 
     @elseif($role === 'mitra')
@@ -113,15 +116,58 @@
                         <span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-2 py-1 rounded">{{ $req->status_tawaran }}</span>
                     </div>
                     <p class="text-gray-500 text-sm mb-4">{{ Str::limit($req->deskripsi_tambahan, 50) }}. Budget: Rp {{ number_format($req->harga_ajuan_per_kg, 0, ',', '.') }}/kg</p>
-                    <button class="w-full py-2 text-sm border border-gray-200 rounded-lg font-bold text-gray-600 hover:bg-gray-50">
+                    <a href="{{ route('permintaan-mitra.show', $req->id_permintaan) }}" class="block w-full text-center py-2 text-sm border border-gray-200 rounded-lg font-bold text-gray-600 hover:bg-gray-50">
                         Lihat Penawaran
-                    </button>
+                    </a>
                 </div>
             @empty
                 <div class="col-span-2 text-center py-6 text-gray-500 bg-white rounded-2xl border border-gray-100">
                     Anda belum membuat permintaan.
                 </div>
             @endforelse
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 mt-8">
+            <h3 class="font-bold text-lg mb-4 text-[#022c22]">Riwayat Pesanan</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="text-gray-400 border-b border-gray-100">
+                            <th class="pb-3 font-medium">Order ID</th>
+                            <th class="pb-3 font-medium">Penjual</th>
+                            <th class="pb-3 font-medium">Produk</th>
+                            <th class="pb-3 font-medium">Total</th>
+                            <th class="pb-3 font-medium">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        @forelse($pesananTerbaru as $order)
+                            <tr class="group hover:bg-gray-50 transition-colors">
+                                <td class="py-4 font-bold text-[#022c22]">#{{ substr($order->id_transaksi, 0, 8) }}</td>
+                                <td class="py-4">{{ $order->penjual->name ?? 'Petani' }}</td>
+                                <td class="py-4">
+                                    @if($order->postingan && $order->postingan->buah)
+                                        {{ $order->postingan->buah->nama_buah }} ({{ $order->jumlah_kg }}kg)
+                                    @else
+                                        Deleted Item ({{ $order->jumlah_kg }}kg)
+                                    @endif
+                                </td>
+                                <td class="py-4 font-bold">Rp {{ number_format($order->total_bayar, 0, ',', '.') }}</td>
+                                <td class="py-4">
+                                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded-md text-xs font-bold">{{ ucfirst($order->status) }}</span>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="py-4 text-center text-gray-500">Belum ada riwayat pesanan.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4">
+                {{ $pesananTerbaru->links() }}
+            </div>
         </div>
 
     @elseif($role === 'admin')

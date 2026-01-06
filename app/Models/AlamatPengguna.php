@@ -21,6 +21,8 @@ class AlamatPengguna extends Model
         'alamat_lengkap',
         'latitude',
         'longitude',
+        'nama_bank',
+        'no_rekening',
     ];
 
     public function user()

@@ -17,8 +17,13 @@
 
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
                         <p class="text-xs font-bold text-gray-500 uppercase mb-2">Rekening Tujuan (Petani)</p>
-                        <p class="font-bold text-lg text-gray-900">BCA 1234567890</p>
-                        <p class="text-sm text-gray-600">a.n {{ $transaksi->penjual->name }}</p>
+                        @if($transaksi->penjual->alamatPengguna && $transaksi->penjual->alamatPengguna->nama_bank && $transaksi->penjual->alamatPengguna->no_rekening)
+                            <p class="font-bold text-lg text-gray-900">{{ $transaksi->penjual->alamatPengguna->nama_bank }} {{ $transaksi->penjual->alamatPengguna->no_rekening }}</p>
+                            <p class="text-sm text-gray-600">a.n {{ $transaksi->penjual->name }}</p>
+                        @else
+                            <p class="text-red-500 font-bold">Petani belum mengatur rekening.</p>
+                            <p class="text-sm text-gray-600">Hubungi via Chat.</p>
+                        @endif
                     </div>
                 </div>
 
