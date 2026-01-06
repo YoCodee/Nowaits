@@ -57,6 +57,30 @@
                         </div>
                     </div>
 
+                    @if($user->peran === 'petani')
+                    {{-- Bank Information --}}
+                    <div>
+                        <h3 class="text-xl font-bold mb-6 text-white flex items-center gap-2">
+                            <svg class="w-5 h-5 text-[#bef264]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                            Bank Details
+                        </h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-400">Bank Name</label>
+                                <input type="text" name="nama_bank" value="{{ old('nama_bank', $alamat?->nama_bank) }}" 
+                                    placeholder="e.g. BCA, BRI, Mandiri"
+                                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#bef264] focus:ring-1 focus:ring-[#bef264] transition">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-gray-400">Account Number</label>
+                                <input type="text" name="no_rekening" value="{{ old('no_rekening', $alamat?->no_rekening) }}" 
+                                    placeholder="e.g. 1234567890"
+                                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#bef264] focus:ring-1 focus:ring-[#bef264] transition">
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
                     {{-- Address Information --}}
                     <div>
                         <h3 class="text-xl font-bold mb-6 text-white flex items-center gap-2">

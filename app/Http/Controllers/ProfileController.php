@@ -28,6 +28,8 @@ class ProfileController extends Controller
             'alamat_lengkap' => 'required|string',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
+            'nama_bank' => 'nullable|string|max:50',
+            'no_rekening' => 'nullable|string|max:50',
         ]);
 
         // Update User Phone
@@ -36,7 +38,6 @@ class ProfileController extends Controller
         ]);
 
         // Update or Create Address
-        // For now, assuming single address per user for simplicity as per request context
         AlamatPengguna::updateOrCreate(
             ['id_pengguna' => $user->id_pengguna],
             [
@@ -45,6 +46,8 @@ class ProfileController extends Controller
                 'alamat_lengkap' => $request->alamat_lengkap,
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
+                'nama_bank' => $request->nama_bank,
+                'no_rekening' => $request->no_rekening,
             ]
         );
 

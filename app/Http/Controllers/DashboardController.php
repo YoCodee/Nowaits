@@ -38,8 +38,7 @@ class DashboardController extends Controller
             $pesananTerbaru = Transaksi::with(['pembeli', 'postingan.buah'])
                 ->where('id_penjual', $user->id_pengguna)
                 ->latest()
-                ->take(5)
-                ->get();
+                ->paginate(5);
 
             $viewData = array_merge($viewData, [
                 'pendapatanKotor' => $pendapatanKotor,
@@ -69,12 +68,18 @@ class DashboardController extends Controller
                 ->latest()
                 ->take(5)
                 ->get();
+            
+            $pesananTerbaru = Transaksi::with(['penjual.alamatPengguna', 'postingan.buah'])
+                ->where('id_pembeli', $user->id_pengguna)
+                ->latest()
+                ->paginate(5);
                 
             $viewData = array_merge($viewData, [
                 'totalPembelianRp' => $totalPembelianRp,
                 'totalBuahDibeli' => $totalBuahDibeli,
                 'requestAktif' => $requestAktif,
-                'permintaanAnda' => $permintaanAnda
+                'permintaanAnda' => $permintaanAnda,
+                'pesananTerbaru' => $pesananTerbaru
             ]);
         } elseif ($role === 'admin') {
             // Admin Stats
